@@ -118,20 +118,20 @@
         </section>
 
         <!-- TODAY SALES -->
-        <h3>📋 Today's Sales</h3>
+        <h3>📋 የዛሬ ሽያጮች</h3>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Category</th>
-                        <th>Item</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Payment</th>
-                        <th>Actions</th>
+                        <th>ቀን</th>
+                        <th>ሰዓት</th>
+                        <th>ምድብ</th>
+                        <th>እቃ</th>
+                        <th>ብዛት</th>
+                        <th>ዋጋ</th>
+                        <th>ድምር</th>
+                        <th>ክፍያ</th>
+                        <th>እርምጃ</th>
                     </tr>
                 </thead>
                 <tbody id="salesTableBody">
@@ -193,11 +193,15 @@
                 if (!response.ok) throw new Error("Server Error");
 
                 const sales = await response.json();
-                const now = new Date();
-                const today = now.toISOString().split("T")[0];
+                const today = new Date().toISOString().split("T")[0];
 
                 const todaySales = sales.filter(sale => {
-                    const date = new Date(sale.createdAt || sale.date);
+                    const rawDate = sale.createdAt || sale.date;
+                    if (!rawDate) return false;
+                    
+                    const date = new Date(rawDate);
+                    if (isNaN(date.getTime())) return false;
+
                     return date.toISOString().split("T")[0] === today;
                 });
 
@@ -212,7 +216,7 @@
             salesTableBody.innerHTML = "";
             let revenue = 0, items = 0, cash = 0, telebirr = 0, bank = 0;
 
-            if (sales.length === 0) {
+            if (!sales || sales.length === 0) {
                 salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">ዛሬ ምንም ሽያጭ አልተመዘገበም።</td></tr>`;
             }
 
@@ -225,9 +229,11 @@
                 if (sale.paymentMethod === "Telebirr") telebirr += total;
                 if (sale.paymentMethod === "Bank") bank += total;
 
-                const saleDate = new Date(sale.createdAt || sale.date);
-                const date = saleDate.toLocaleDateString("en-GB");
-                const time = saleDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+                const rawDate = sale.createdAt || sale.date;
+                const saleDate = rawDate ? new Date(rawDate) : new Date();
+                
+                const date = !isNaN(saleDate.getTime()) ? saleDate.toLocaleDateString("en-GB") : "-";
+                const time = !isNaN(saleDate.getTime()) ? saleDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : "-";
 
                 const row = document.createElement("tr");
                 row.innerHTML = `
@@ -238,7 +244,7 @@
                     <td>${sale.quantity}</td>
                     <td>${sale.price} ብር</td>
                     <td><b>${total.toFixed(2)} ብር</b></td>
-                    <td>${sale.paymentMethod}</td>
+                    <td>${sale.paymentMethod || "Cash"}</td>
                     <td><button class="delete-btn" onclick="deleteSale('${sale._id}')">ሰርዝ</button></td>
                 `;
                 salesTableBody.appendChild(row);
