@@ -1,13 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path'); // 1. path ን እዚህ እናስገባዋለን
 const Sale = require('./models/Sale');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// ከ MongoDB Atlas ጋር መገናኘት (옵ሽኖቹን አጥፍተናል)
+// 2. የ client ፎልደርን እንደ Static ዌብሳይት ማስተናገጃ እንጠቀመዋለን
+app.use(express.static(path.join(__dirname, 'client')));
+
+// ከ MongoDB Atlas ጋር መገናኘት 
 const MONGO_URI = 'mongodb://birukabera1707_db_user:biruk17@ac-jhmdzvj-shard-00-00.rkagfg3.mongodb.net:27017,ac-jhmdzvj-shard-00-01.rkagfg3.mongodb.net:27017,ac-jhmdzvj-shard-00-02.rkagfg3.mongodb.net:27017/Ema_Burger?ssl=true&replicaSet=atlas-tsrnvd-shard-0&authSource=admin&appName=Cluster0';
 
 mongoose.connect(MONGO_URI)
@@ -61,8 +65,8 @@ app.delete('/api/sales/:id', async (req, res) => {
     }
 });
 
-// ሰርቨሩ የሚጀምርበት ፖርት
-const PORT = 5000;
+// ሰርቨሩ የሚጀምርበት ፖርት (Render በራሱ ፖርት እንዲሰጠው process.env.PORT እንጠቀማለን)
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
