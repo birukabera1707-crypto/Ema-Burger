@@ -60,6 +60,21 @@ app.post('/api/sales', async (req, res) => {
 // 3. ሽያጭ ከዳታቤዝ ለመሰረዝ (DELETE)
 app.delete('/api/sales/:id', async (req, res) => {
     try {
+        const sale = await Sale.findById(req.params.id);
+        if (!sale) {
+            return res.status(404).json({ error: 'Sale not found' });
+        }
+
+        // ሽያጩ ከተመዘገበበት ሰዓት ጀምሮ ያለውን ልዩነት ማስላት (በደቂቃ)
+        const saleDate = new Date(sale.createdAt || sale.date);
+        const now = new Date();
+        const diffMinutes = (now - saleDate) / (1000 * 60);
+
+        // ከ 20 ደቂቃ በላይ ከሆነ ማጥፋት አይቻልም (ሞባይልም ሆነ ፒሲ ላይ ይሰራል)
+        if (diffMinutes > 20) {
+            return res.status(400).json({ error: 'ይህ ሽያጭ ከተመዘገበ 20 ደቂቃ በላይ ስለሆነ መሰረዝ አይቻልም።' });
+        }
+
         await Sale.findByIdAndDelete(req.params.id);
         res.json({ message: 'Sale deleted successfully' });
     } catch (err) {

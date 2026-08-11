@@ -51,7 +51,7 @@ body {
     width: 100%;
     min-height: 76px;
 
-    background: var(--black);
+    background: var(--sage);
 
     display: flex;
     align-items: center;
