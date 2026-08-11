@@ -5,49 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMA Burger - Sales Reports</title>
     <link rel="stylesheet" href="Style/style.css">
+    <style>
+        .report-header {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
 <body>
 
     <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="logo-container">
+    <nav class="navbar" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="logo-container" style="display: flex; align-items: center; gap: 10px;">
             <img src="Style/logo.png" alt="EMA Burger Logo">
             <h1>EMA BURGER</h1>
         </div>
-        <div style="display: flex; gap: 10px;">
-            <a href="index.html" style="color: white; text-decoration: none; padding: 8px 15px; background: #6c757d; border-radius: 5px;">📊 Dashboard</a>
-            <a href="reports.html" style="color: white; text-decoration: none; padding: 8px 15px; background: #2575fc; border-radius: 5px;">📈 Reports</a>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <a href="index.html" class="submit-btn" style="text-decoration: none; padding: 8px 15px; background: #6c757d; font-size: 14px; border-radius: 5px;">📊 Dashboard</a>
+            <a href="reports.html" class="submit-btn" style="text-decoration: none; padding: 8px 15px; background: #1e3c72; font-size: 14px; border-radius: 5px;">📈 Reports</a>
         </div>
     </nav>
 
     <!-- MAIN -->
     <main class="container">
-        <h2>Monthly & Historical Sales Report</h2>
+        
+        <!-- REPORT BANNER TITLE -->
+        <div class="report-header">
+            <h2>📈 Sales Reports & Date Range Filter</h2>
+            <p style="margin: 5px 0 0 0; opacity: 0.9;">ከየት እስከየት ባሉ ቀናት መሃል የተከናወኑ የንግድ እንቅስቃሴዎች እና ማጠቃለያ ይመልከቱ</p>
+        </div>
 
-        <!-- MONTH SELECTOR -->
-        <div class="form-card" style="margin-bottom: 20px; padding: 15px;">
-            <label for="reportMonth" style="font-weight: bold; margin-bottom: 5px; display: block;">📅 ሪፖርት የሚታይበትን ወር ይምረጡ (Select Month):</label>
-            <input type="month" id="reportMonth" style="padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;">
+        <!-- DATE RANGE SELECTOR -->
+        <div class="form-card" style="margin-bottom: 25px; padding: 20px; border-left: 5px solid #1e3c72;">
+            <label style="font-weight: bold; margin-bottom: 10px; display: block; color: #333;">📅 የሪፖርት የቀን ክልል ይምረጡ (Date Range):</label>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                <div>
+                    <label for="startDate" style="font-size: 14px; color: #666; display: block; margin-bottom: 3px;">ከ (From):</label>
+                    <input type="date" id="startDate" style="padding: 8px; font-size: 15px; border-radius: 5px; border: 1px solid #ccc;">
+                </div>
+                <div>
+                    <label for="endDate" style="font-size: 14px; color: #666; display: block; margin-bottom: 3px;">እስከ (To):</label>
+                    <input type="date" id="endDate" style="padding: 8px; font-size: 15px; border-radius: 5px; border: 1px solid #ccc;">
+                </div>
+                <button onclick="fetchHistoricalSales()" class="submit-btn" style="padding: 10px 20px; margin-top: 20px; background: #1e3c72; cursor: pointer;">🔍 ፈልግ (Filter)</button>
+            </div>
         </div>
 
         <!-- DASHBOARD CARDS -->
         <section class="dashboard-cards">
-            <div class="stat-card">
+            <div class="stat-card" style="border-top: 4px solid #1e3c72;">
                 <h4>🧾 Total Orders</h4>
                 <h2 id="repOrders">0</h2>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" style="border-top: 4px solid #1e3c72;">
                 <h4>🍔 Total Sold Items</h4>
                 <h2 id="repItems">0</h2>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" style="border-top: 4px solid #1e3c72;">
                 <h4>💰 Total Revenue</h4>
                 <h2 id="repRevenue">0.00 ETB</h2>
             </div>
         </section>
 
         <!-- PAYMENT SUMMARY -->
-        <h3>Payment Breakdown</h3>
+        <h3 style="margin-top: 30px; border-bottom: 2px solid #ddd; padding-bottom: 5px;">💳 Payment Method Breakdown</h3>
         <section class="payment-cards">
             <div class="payment-card">
                 <h3>💵 Cash</h3>
@@ -64,11 +89,11 @@
         </section>
 
         <!-- SALES TABLE -->
-        <h3 id="tableTitle" style="margin-top: 30px;">📋 Sales Records for Selected Month</h3>
+        <h3 id="tableTitle" style="margin-top: 40px;">📋 Detailed Sales Records</h3>
         <div class="table-container">
             <table>
                 <thead>
-                    <tr>
+                    <tr style="background: #1e3c72; color: white;">
                         <th>Date</th>
                         <th>Time</th>
                         <th>Category</th>
@@ -81,7 +106,7 @@
                 </thead>
                 <tbody id="repTableBody">
                     <tr>
-                        <td colspan="8" class="empty-message">No sales found for this month.</td>
+                        <td colspan="8" class="empty-message">No sales found for this date range.</td>
                     </tr>
                 </tbody>
             </table>
@@ -92,16 +117,13 @@
     <script>
         const API_URL = "/api/sales";
         const repTableBody = document.getElementById("repTableBody");
-        const monthInput = document.getElementById("reportMonth");
+        const startDateInput = document.getElementById("startDate");
+        const endDateInput = document.getElementById("endDate");
 
-        // በነባሪ የአሁኑን ወር መምረጥ (YYYY-MM)
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        monthInput.value = `${year}-${month}`;
-
-        // ወር ሲቀየር ሪፖርቱን ማስተካከል
-        monthInput.addEventListener("change", fetchHistoricalSales);
+        // በነባሪ የዛሬውን ቀን መሙላት
+        const todayStr = new Date().toISOString().split("T")[0];
+        startDateInput.value = todayStr;
+        endDateInput.value = todayStr;
 
         async function fetchHistoricalSales() {
             try {
@@ -109,20 +131,25 @@
                 if (!response.ok) throw new Error("Server Error");
 
                 const sales = await response.json();
-                const selectedYearMonth = monthInput.value; // ምሳሌ፦ "2026-07" (ያለፈው ወር ወይም ሌላ)
+                const startDate = startDateInput.value;
+                const endDate = endDateInput.value;
 
-                if (!selectedYearMonth) return;
+                if (!startDate || !endDate) {
+                    alert("እባክዎ መጀመሪያ እና የመጨረሻ ቀን ይምረጡ።");
+                    return;
+                }
 
-                // በተመረጠው ወር መሰረት ማጣራት
+                // ከቀን A እስከ ቀን B ማጣራት
                 const filteredSales = sales.filter(sale => {
                     const rawDate = sale.createdAt || sale.date;
                     if (!rawDate) return false;
                     
-                    const saleDate = new Date(rawDate);
-                    if (isNaN(saleDate.getTime())) return false;
+                    const saleDateObj = new Date(rawDate);
+                    if (isNaN(saleDateObj.getTime())) return false;
 
-                    const saleYearMonth = saleDate.toISOString().split("T")[0].slice(0, 7);
-                    return saleYearMonth === selectedYearMonth;
+                    const saleDateOnly = saleDateObj.toISOString().split("T")[0];
+
+                    return saleDateOnly >= startDate && saleDateOnly <= endDate;
                 });
 
                 renderReport(filteredSales);
@@ -137,7 +164,7 @@
             let revenue = 0, items = 0, cash = 0, telebirr = 0, bank = 0;
 
             if (!sales || sales.length === 0) {
-                repTableBody.innerHTML = `<tr><td colspan="8" class="empty-message">በዚህ ወር የተመዘገበ ሽያጭ የለም።</td></tr>`;
+                repTableBody.innerHTML = `<tr><td colspan="8" class="empty-message">በተመረጠው የቀን ክልል ውስጥ የተመዘገበ ሽያጭ የለም።</td></tr>`;
             }
 
             sales.forEach(sale => {
@@ -177,7 +204,7 @@
             document.getElementById("repBank").textContent = bank.toFixed(2) + " ETB";
         }
 
-        // ገጹ ሲከፈት የመጀመሪያውን ሪፖርት ማምጣት
+        // ገጹ ሲከፈት የዛሬውን ሪፖርት ማምጣት
         fetchHistoricalSales();
     </script>
 </body>
