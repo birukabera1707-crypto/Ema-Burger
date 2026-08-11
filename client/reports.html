@@ -5,16 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMA Burger - Sales Reports</title>
     <link rel="stylesheet" href="Style/style.css">
-    <style>
-        .report-header {
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-    </style>
 </head>
 <body>
 
@@ -25,21 +15,16 @@
             <h1>EMA BURGER</h1>
         </div>
         <div style="display: flex; gap: 10px; align-items: center;">
-            <a href="index.html" class="submit-btn" style="text-decoration: none; padding: 8px 15px; background: #6c757d; font-size: 10px; border-radius: 3px;">📊 Dashboard</a>
+            <a href="index.html" class="submit-btn" style="text-decoration: none; padding: 8px 15px; background: #6c757d; font-size: 14px; border-radius: 5px;">📊 Dashboard</a>
+            <a href="reports.html" class="submit-btn" style="text-decoration: none; padding: 8px 15px; background: #1e3c72; font-size: 14px; border-radius: 5px;">📈 Reports</a>
         </div>
     </nav>
 
     <!-- MAIN -->
     <main class="container">
         
-        <!-- REPORT BANNER TITLE -->
-        <div class="report-header">
-            <h2>📈 Sales Reports & Date Range Filter</h2>
-            <p style="margin: 5px 0 0 0; opacity: 0.9;">ከየት እስከየት ባሉ ቀናት መሃል የተከናወኑ የንግድ እንቅስቃሴዎች እና ማጠቃለያ ይመልከቱ</p>
-        </div>
-
-        <!-- COMPACT DATE RANGE SELECTOR -->
-        <div class="form-card" style="margin-bottom: 25px; padding: 15px; display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; border-left: 5px solid #1e3c72;">
+        <!-- COMPACT DATE RANGE SELECTOR (ጽሑፎቹ ጠፍተዋል) -->
+        <div class="form-card" style="margin-bottom: 25px; padding: 12px 15px; display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; border-left: 5px solid #1e3c72;">
             <div>
                 <label for="startDate" style="font-size: 13px; color: #666; display: block; margin-bottom: 3px;">ከ (From):</label>
                 <input type="date" id="startDate" style="padding: 7px 10px; font-size: 14px; border-radius: 5px; border: 1px solid #ccc;">
