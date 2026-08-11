@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMA Burger - Sales Management</title>
+    <!-- ፋይሉ client ፎልደር ውስጥ ስላለ Style ፎልደርን በትክክለኛው አድራሻ ጠርተናል -->
+    <link rel="stylesheet" href="Style/style.css">
+</head>
+<body>
+
+    <!-- ናቭባር (ከ አርማ/Logo ጋር) -->
+    <div class="navbar">
+        <div class="logo-container" style="display: flex; align-items: center; gap: 12px;">
+            <!-- የሎጎ ምስልህ የሚቀመጥበት ቦታ (logo.png የሚለውን የሎጎህን ስም አድርገው) -->
+            <img src="Style/logo.png" alt="EMA Burger Logo" style="width: 45px; height: 45px; object-fit: cover; border-radius: 50%; border: 2px solid #D89B45;">
+            <h1>EMA BURGER</h1>
+        </div>
+        <span>Sales Management</span>
+    </div>
+
+    <div class="container">
+        <h2>የዕለቱ የሽያጭ ዳሽቦርድ</h2>
+
+        <!-- የሽያጭ ማስገቢያ ፎርም -->
+        <div class="form-card">
+            <form id="salesForm">
+                <div class="form-group">
+                    <label for="itemName">የምግብ/መጠጥ ስም:</label>
+                    <input type="text" id="itemName" placeholder="ምሳሌ፦ በርገር፣ ፒዛ፣ ማኪያቶ" required>
+                </div>
+
+                <div class="row">
+                    <div class="col form-group">
+                        <label for="quantity">ብዛት (Qty):</label>
+                        <input type="number" id="quantity" value="1" min="1" required>
+                    </div>
+                    <div class="col form-group">
+                        <label for="price">ያንዱ ዋጋ (Unit Price):</label>
+                        <input type="number" id="price" placeholder="0.00" required>
+                    </div>
+                    <div class="col form-group">
+                        <label for="paymentMethod">የክፍያ መንገድ:</label>
+                        <select id="paymentMethod">
+                            <option value="Cash">ጥሬ ገንዘብ (Cash)</option>
+                            <option value="Telebirr">ቴሌብር (Telebirr)</option>
+                            <option value="Bank">ባንክ (Bank)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">ሽያጩን መዝግብ</button>
+            </form>
+        </div>
+
+        <!-- የጠቅላላ ገቢ ማጠቃለያ -->
+        <div class="summary-box">
+            <h3>አጠቃላይ ገቢ (Total Revenue)</h3>
+            <h2 id="totalRevenueDisplay">0.00 ብር</h2>
+        </div>
+
+        <!-- የሽያጭ ዝርዝር ሰንጠረዥ -->
+        <h3>የተመዘገቡ ሽያጮች ዝርዝር</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ሰዓት</th>
+                        <th>እቃ</th>
+                        <th>ብዛት</th>
+                        <th>ዋጋ</th>
+                        <th>ድምር</th>
+                        <th>ክፍያ</th>
+                        <th>እርምጃ</th>
+                    </tr>
+                </thead>
+                <tbody id="salesTableBody">
+                    <!-- ጃቫስክሪፕት ዳታዎችን ከ MongoDB አምጥቶ እዚህ ይጨምራል -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<script>
+    const API_URL = 'http://localhost:5000/api/sales';
+
+    const salesForm = document.getElementById('salesForm');
+    const salesTableBody = document.getElementById('salesTableBody');
+    const totalRevenueDisplay = document.getElementById('totalRevenueDisplay');
+
+    // 1. ከ MongoDB Atlas (Backend) ሽያጮችን አምጥቶ ማሳያ
+    async function fetchSales() {
+        try {
+            const response = await fetch(API_URL);
+            const sales = await response.json();
+            
+            salesTableBody.innerHTML = '';
+            let totalRevenue = 0;
+
+            sales.forEach((sale) => {
+                totalRevenue += sale.total;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${sale.date}</td>
+                    <td><b>${sale.itemName}</b></td>
+                    <td>${sale.quantity}</td>
+                    <td>${sale.price} ብር</td>
+                    <td style="font-weight: bold; color: #3B2A22;">${sale.total} ብር</td>
+                    <td>${sale.paymentMethod}</td>
+                    <td><button class="delete-btn" onclick="deleteSale('${sale._id}')">ሰርዝ</button></td>
+                `;
+                salesTableBody.appendChild(tr);
+            });
+
+            totalRevenueDisplay.innerText = totalRevenue.toFixed(2) + ' ብር';
+        } catch (err) {
+            console.error('Error fetching sales:', err);
+        }
+    }
+
+    // 2. አዲስ ሽያጭ ወደ MongoDB Atlas መላኪያ (POST)
+    salesForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const itemName = document.getElementById('itemName').value;
+        const quantity = Number(document.getElementById('quantity').value);
+        const price = Number(document.getElementById('price').value);
+        const paymentMethod = document.getElementById('paymentMethod').value;
+
+        const newSale = { itemName, quantity, price, paymentMethod };
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newSale)
+            });
+
+            if (response.ok) {
+                salesForm.reset();
+                document.getElementById('quantity').value = 1;
+                fetchSales(); // ሰንጠረዡን በድጋሚ በማደስ አዲሱን ዳታ ማሳየት
+            }
+        } catch (err) {
+            console.error('Error saving sale:', err);
+        }
+    });
+
+    // 3. ሽያጭ ከዳታቤዝ መሰረጂያ (DELETE)
+    window.deleteSale = async function(id) {
+        try {
+            const response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                fetchSales();
+            }
+        } catch (err) {
+            console.error('Error deleting sale:', err);
+        }
+    };
+
+    // ገጹ ሲከፈት ዳታዎችን ከሰርቨር መጫን
+    fetchSales();
+</script>
+
+</body>
+</html>

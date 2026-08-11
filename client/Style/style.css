@@ -1,0 +1,179 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F5F0E6; /* Warm Cream */
+    color: #3B2A22; /* Dark Brown */
+    margin: 0;
+    padding: 0;
+}
+
+/* ናቭባር (Navbar) */
+.navbar {
+    background-color: #1F211E; /* Soft Black */
+    color: #F5F0E6;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.navbar h1 {
+    margin: 0;
+    font-size: 22px;
+    color: #D89B45; /* Warm Gold */
+}
+
+.navbar span {
+    font-size: 14px;
+    color: #A8B99A; /* Sage Green */
+}
+
+/* ዋናው ማዕቀፍ */
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(59, 42, 34, 0.08);
+}
+
+h2 {
+    color: #3B2A22;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* ፎርም ክፍሎች */
+.form-card {
+    background-color: #F5F0E6;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 5px solid #D89B45;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #3B2A22;
+}
+
+input, select {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #A8B99A;
+    border-radius: 6px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    color: #3B2A22;
+    font-size: 14px;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #D89B45;
+    box-shadow: 0 0 5px rgba(216, 155, 69, 0.3);
+}
+
+.row {
+    display: flex;
+    gap: 15px;
+}
+
+.col {
+    flex: 1;
+}
+
+button.submit-btn {
+    background-color: #D89B45; /* Warm Gold */
+    color: #3B2A22;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+button.submit-btn:hover {
+    background-color: #c48835;
+}
+
+/* የገቢ ማጠቃለያ ቦክስ */
+.summary-box {
+    background-color: #A8B99A; /* Sage Green */
+    color: #3B2A22;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+}
+
+.summary-box h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.summary-box h2 {
+    margin: 0;
+    color: #1F211E;
+    font-size: 26px;
+}
+
+/* ሰንጠረዥ (Table) */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+th {
+    background-color: #1F211E; /* Soft Black */
+    color: #F5F0E6;
+    font-size: 14px;
+}
+
+td {
+    border-bottom: 1px solid #e0dcd0;
+    color: #3B2A22;
+    font-size: 14px;
+}
+
+tr:hover {
+    background-color: #F5F0E6;
+}
+
+.delete-btn {
+    background-color: #3B2A22;
+    color: #F5F0E6;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+
+.delete-btn:hover {
+    background-color: #1F211E;
+}
