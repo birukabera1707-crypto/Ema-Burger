@@ -19,24 +19,24 @@
 
     <!-- MAIN -->
     <main class="container">
-        <h2>የዛሬ የሽያጭ ዳሽቦርድ</h2>
+        <h2>Sales Dashboard</h2>
 
         <div class="date-box">
-            📅 ዛሬ: <span id="todayDate"></span>
+            📅 Today: <span id="todayDate"></span>
         </div>
 
         <!-- DASHBOARD CARDS -->
         <section class="dashboard-cards">
             <div class="stat-card">
-                <h4>💰 የዛሬ ጠቅላላ ሽያጭ</h4>
+                <h4>💰 Today's Total Sales</h4>
                 <h2 id="todayRevenue">0.00 ብር</h2>
             </div>
             <div class="stat-card">
-                <h4>🧾 የዛሬ Orders</h4>
+                <h4>🧾 Today's Orders</h4>
                 <h2 id="todayOrders">0</h2>
             </div>
             <div class="stat-card">
-                <h4>🍔 የተሸጡ Items</h4>
+                <h4>🍔 Today's Sold Items</h4>
                 <h2 id="todayItems">0</h2>
             </div>
             <div class="stat-card">
@@ -46,31 +46,31 @@
         </section>
 
         <!-- PAYMENT SUMMARY -->
-        <h3>የዛሬ የክፍያ ማጠቃለያ</h3>
+        <h3>Payment Method</h3>
         <section class="payment-cards">
             <div class="payment-card">
                 <h3>💵 Cash</h3>
-                <strong id="cashTotal">0.00 ብር</strong>
+                <strong id="cashTotal">0.00 ETB</strong>
             </div>
             <div class="payment-card">
                 <h3>📱 Telebirr</h3>
-                <strong id="telebirrTotal">0.00 ብር</strong>
+                <strong id="telebirrTotal">0.00 ETB</strong>
             </div>
             <div class="payment-card">
                 <h3>🏦 Bank</h3>
-                <strong id="bankTotal">0.00 ብር</strong>
+                <strong id="bankTotal">0.00 ETB</strong>
             </div>
         </section>
 
         <!-- NEW SALE -->
         <section class="form-card">
-            <h3>🛒 አዲስ ሽያጭ መመዝገቢያ</h3>
+            <h3>🛒 Add New Sale</h3>
             <form id="salesForm">
                 <div class="row">
                     <div class="form-group">
-                        <label for="category">የምርት ምድብ</label>
+                        <label for="category">Item Category</label>
                         <select id="category" required>
-                            <option value="">-- ምድብ ይምረጡ --</option>
+                            <option value="">-- Select Category --</option>
                             <option value="Burger">🍔 Burger</option>
                             <option value="Pizza">🍕 Pizza</option>
                             <option value="Juice">🧃 Juice</option>
@@ -80,26 +80,26 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="itemName">የምርት ስም</label>
+                        <label for="itemName">Item Name</label>
                         <select id="itemName" required>
-                            <option value="">-- ምርት ይምረጡ --</option>
+                            <option value="">-- Select Item --</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label for="quantity">ብዛት</label>
+                        <label for="quantity">Quantity</label>
                         <input type="number" id="quantity" value="1" min="1" required>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group">
-                        <label for="price">ያንዱ ዋጋ</label>
+                        <label for="price">Unit Price</label>
                         <input type="number" id="price" placeholder="0.00" min="0" step="0.01" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="paymentMethod">የክፍያ መንገድ</label>
+                        <label for="paymentMethod">Payment Method</label>
                         <select id="paymentMethod">
                             <option value="Cash">💵 Cash</option>
                             <option value="Telebirr">📱 Telebirr</option>
@@ -108,35 +108,35 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="saleTotal">ጠቅላላ ዋጋ</label>
-                        <input type="text" id="saleTotal" value="0.00 ብር" readonly>
+                        <label for="saleTotal">Total Amount</label>
+                        <input type="text" id="saleTotal" value="0.00 ETB" readonly>
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">💾 ሽያጩን መዝግብ</button>
+                <button type="submit" class="submit-btn">💾 Save Sale</button>
             </form>
         </section>
 
         <!-- TODAY SALES -->
-        <h3>📋 የዛሬ ሽያጮች</h3>
+        <h3>📋 Today's Sales</h3>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>ቀን</th>
-                        <th>ሰዓት</th>
-                        <th>ምድብ</th>
-                        <th>እቃ</th>
-                        <th>ብዛት</th>
-                        <th>ዋጋ</th>
-                        <th>ድምር</th>
-                        <th>ክፍያ</th>
-                        <th>እርምጃ</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Payment</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="salesTableBody">
                     <tr>
-                        <td colspan="9" class="empty-message">ዛሬ ምንም ሽያጭ አልተመዘገበም።</td>
+                        <td colspan="9" class="empty-message">No sales found for today.</td>
                     </tr>
                 </tbody>
             </table>
@@ -166,7 +166,7 @@
         document.getElementById("category").addEventListener("change", function () {
             const category = this.value;
             const itemSelect = document.getElementById("itemName");
-            itemSelect.innerHTML = `<option value="">-- ምርት ይምረጡ --</option>`;
+            itemSelect.innerHTML = `<option value="">-- Select Item --</option>`;
             if (!products[category]) return;
 
             products[category].forEach(product => {
@@ -181,7 +181,7 @@
             const quantity = Number(document.getElementById("quantity").value) || 0;
             const price = Number(document.getElementById("price").value) || 0;
             const total = quantity * price;
-            document.getElementById("saleTotal").value = total.toFixed(2) + " ብር";
+            document.getElementById("saleTotal").value = total.toFixed(2) + " ETB";
         }
 
         document.getElementById("quantity").addEventListener("input", calculateTotal);
@@ -217,7 +217,7 @@
             let revenue = 0, items = 0, cash = 0, telebirr = 0, bank = 0;
 
             if (!sales || sales.length === 0) {
-                salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">ዛሬ ምንም ሽያጭ አልተመዘገበም።</td></tr>`;
+                salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">No sales found for today.</td></tr>`;
             }
 
             sales.forEach(sale => {
@@ -242,21 +242,21 @@
                     <td>${sale.category || "-"}</td>
                     <td><b>${sale.itemName}</b></td>
                     <td>${sale.quantity}</td>
-                    <td>${sale.price} ብር</td>
-                    <td><b>${total.toFixed(2)} ብር</b></td>
+                    <td>${sale.price} ETB</td>
+                    <td><b>${total.toFixed(2)} ETB</b></td>
                     <td>${sale.paymentMethod || "Cash"}</td>
                     <td><button class="delete-btn" onclick="deleteSale('${sale._id}')">ሰርዝ</button></td>
                 `;
                 salesTableBody.appendChild(row);
             });
 
-            document.getElementById("todayRevenue").textContent = revenue.toFixed(2) + " ብር";
+            document.getElementById("todayRevenue").textContent = revenue.toFixed(2) + " ETB";
             document.getElementById("todayOrders").textContent = sales.length;
             document.getElementById("todayItems").textContent = items;
-            document.getElementById("averageSale").textContent = (sales.length ? revenue / sales.length : 0).toFixed(2) + " ብር";
-            document.getElementById("cashTotal").textContent = cash.toFixed(2) + " ብር";
-            document.getElementById("telebirrTotal").textContent = telebirr.toFixed(2) + " ብር";
-            document.getElementById("bankTotal").textContent = bank.toFixed(2) + " ብር";
+            document.getElementById("averageSale").textContent = (sales.length ? revenue / sales.length : 0).toFixed(2) + " ETB";
+            document.getElementById("cashTotal").textContent = cash.toFixed(2) + " ETB";
+            document.getElementById("telebirrTotal").textContent = telebirr.toFixed(2) + " ETB";
+            document.getElementById("bankTotal").textContent = bank.toFixed(2) + " ETB";
         }
 
         salesForm.addEventListener("submit", async function (event) {
@@ -268,7 +268,7 @@
             const paymentMethod = document.getElementById("paymentMethod").value;
 
             if (!category || !itemName || quantity <= 0 || price < 0) {
-                alert("እባክዎ መረጃውን በትክክል ይሙሉ።");
+                alert("Please fill in all fields correctly.");
                 return;
             }
 
@@ -289,17 +289,17 @@
 
                 salesForm.reset();
                 document.getElementById("quantity").value = 1;
-                document.getElementById("itemName").innerHTML = `<option value="">-- ምርት ይምረጡ --</option>`;
+                document.getElementById("itemName").innerHTML = `<option value="">-- Select Item --</option>`;
                 calculateTotal();
                 await fetchSales();
             } catch (error) {
                 console.error("Save error:", error);
-                alert("ሽያጩን መመዝገብ አልተቻለም።");
+                alert("Failed to save the sale.");
             }
         });
 
         window.deleteSale = async function (id) {
-            if (!confirm("ይህን ሽያጭ መሰረዝ ይፈልጋሉ?")) return;
+            if (!confirm("Are you sure you want to delete this sale?")) return;
 
             try {
                 const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
@@ -307,7 +307,7 @@
                 await fetchSales();
             } catch (error) {
                 console.error("Delete error:", error);
-                alert("ሽያጩን መሰረዝ አልተቻለም።");
+                alert("Failed to delete the sale.");
             }
         };
 
