@@ -35,11 +35,13 @@ app.get('/api/sales', async (req, res) => {
 // 2. አዲስ ሽያጭ ወደ ዳታቤዝ ለመመዝገብ (POST)
 app.post('/api/sales', async (req, res) => {
     try {
-        const { itemName, quantity, price, paymentMethod } = req.body;
+        // category እዚህ ውስጥ መካተት አለበት
+        const { category, itemName, quantity, price, paymentMethod } = req.body;
         const total = quantity * price;
-        const date = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const date = req.body.date || new Date().toISOString();
 
         const newSale = new Sale({
+            category, // እዚህ ጋር ይጨመራል
             itemName,
             quantity,
             price,
