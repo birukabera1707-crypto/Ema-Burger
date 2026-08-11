@@ -212,12 +212,12 @@
             }
         }
 
-        function renderSales(sales) {
+      function renderSales(sales) {
             salesTableBody.innerHTML = "";
             let revenue = 0, items = 0, cash = 0, telebirr = 0, bank = 0;
 
             if (!sales || sales.length === 0) {
-                salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">No sales found for today.</td></tr>`;
+                salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">ዛሬ ምንም ሽያጭ አልተመዘገበም።</td></tr>`;
             }
 
             sales.forEach(sale => {
@@ -232,6 +232,10 @@
                 const rawDate = sale.createdAt || sale.date;
                 const saleDate = rawDate ? new Date(rawDate) : new Date();
                 
+                // የ 20 ደቂቃ ገደብ ማረጋገጫ (ለተኑን ለማሰናከል)
+                const isExpired = (new Date() - saleDate) > (20 * 60 * 1000);
+                const deleteDisabled = isExpired ? "disabled style='opacity:0.3; cursor:not-allowed;'" : "";
+
                 const date = !isNaN(saleDate.getTime()) ? saleDate.toLocaleDateString("en-GB") : "-";
                 const time = !isNaN(saleDate.getTime()) ? saleDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : "-";
 
@@ -242,14 +246,15 @@
                     <td>${sale.category || "-"}</td>
                     <td><b>${sale.itemName}</b></td>
                     <td>${sale.quantity}</td>
-                    <td>${sale.price} ETB</td>
-                    <td><b>${total.toFixed(2)} ETB</b></td>
+                    <td>${sale.price} ብር</td>
+                    <td><b>${total.toFixed(2)} ብር</b></td>
                     <td>${sale.paymentMethod || "Cash"}</td>
-                    <td><button class="delete-btn" onclick="deleteSale('${sale._id}')">🗑️ Delete</button></td>
+                    <td>
+                        <button class="delete-btn" ${deleteDisabled} onclick="deleteSale('${sale._id}')">ሰርዝ</button>
+                    </td>
                 `;
                 salesTableBody.appendChild(row);
             });
-
             document.getElementById("todayRevenue").textContent = revenue.toFixed(2) + " ETB";
             document.getElementById("todayOrders").textContent = sales.length;
             document.getElementById("todayItems").textContent = items;
@@ -298,8 +303,9 @@
             }
         });
 
-        window.deleteSale = async function (id) {
-            if (!confirm("Are you sure you want to delete this sale?")) return;
+       window.deleteSale = async function (id) {
+            // ከላይ በተን የተሰናከለ ቢሆንም፣ በስህተት እንዳይሰረዝ እዚህም ተጨማሪ ቼክ ማድረግ ይቻላል
+            if (!confirm("ይህን ሽያጭ በእርግጥ መሰረዝ ይፈልጋሉ?")) return;
 
             try {
                 const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
@@ -307,10 +313,9 @@
                 await fetchSales();
             } catch (error) {
                 console.error("Delete error:", error);
-                alert("Failed to delete the sale.");
+                alert("ይህ ሽያጭ ከተመዘገበ 20 ደቂቃ በላይ ስለሆነ መሰረዝ አይቻልም።");
             }
         };
-
         calculateTotal();
         fetchSales();
     </script>
