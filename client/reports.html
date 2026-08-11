@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="am">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMA Burger - Sales Reports</title>
+    <link rel="stylesheet" href="Style/style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="Style/logo.png" alt="EMA Burger Logo">
+            <h1>EMA BURGER</h1>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <a href="index.html" style="color: white; text-decoration: none; padding: 8px 15px; background: #6c757d; border-radius: 5px;">📊 Dashboard</a>
+            <a href="reports.html" style="color: white; text-decoration: none; padding: 8px 15px; background: #2575fc; border-radius: 5px;">📈 Reports</a>
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="container">
+        <h2>Monthly & Historical Sales Report</h2>
+
+        <!-- MONTH SELECTOR -->
+        <div class="form-card" style="margin-bottom: 20px; padding: 15px;">
+            <label for="reportMonth" style="font-weight: bold; margin-bottom: 5px; display: block;">📅 ሪፖርት የሚታይበትን ወር ይምረጡ (Select Month):</label>
+            <input type="month" id="reportMonth" style="padding: 10px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;">
+        </div>
+
+        <!-- DASHBOARD CARDS -->
+        <section class="dashboard-cards">
+            <div class="stat-card">
+                <h4>🧾 Total Orders</h4>
+                <h2 id="repOrders">0</h2>
+            </div>
+            <div class="stat-card">
+                <h4>🍔 Total Sold Items</h4>
+                <h2 id="repItems">0</h2>
+            </div>
+            <div class="stat-card">
+                <h4>💰 Total Revenue</h4>
+                <h2 id="repRevenue">0.00 ETB</h2>
+            </div>
+        </section>
+
+        <!-- PAYMENT SUMMARY -->
+        <h3>Payment Breakdown</h3>
+        <section class="payment-cards">
+            <div class="payment-card">
+                <h3>💵 Cash</h3>
+                <strong id="repCash">0.00 ETB</strong>
+            </div>
+            <div class="payment-card">
+                <h3>📱 Telebirr</h3>
+                <strong id="repTelebirr">0.00 ETB</strong>
+            </div>
+            <div class="payment-card">
+                <h3>🏦 Bank</h3>
+                <strong id="repBank">0.00 ETB</strong>
+            </div>
+        </section>
+
+        <!-- SALES TABLE -->
+        <h3 id="tableTitle" style="margin-top: 30px;">📋 Sales Records for Selected Month</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Payment</th>
+                    </tr>
+                </thead>
+                <tbody id="repTableBody">
+                    <tr>
+                        <td colspan="8" class="empty-message">No sales found for this month.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        const API_URL = "/api/sales";
+        const repTableBody = document.getElementById("repTableBody");
+        const monthInput = document.getElementById("reportMonth");
+
+        // በነባሪ የአሁኑን ወር መምረጥ (YYYY-MM)
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        monthInput.value = `${year}-${month}`;
+
+        // ወር ሲቀየር ሪፖርቱን ማስተካከል
+        monthInput.addEventListener("change", fetchHistoricalSales);
+
+        async function fetchHistoricalSales() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error("Server Error");
+
+                const sales = await response.json();
+                const selectedYearMonth = monthInput.value; // ምሳሌ፦ "2026-07" (ያለፈው ወር ወይም ሌላ)
+
+                if (!selectedYearMonth) return;
+
+                // በተመረጠው ወር መሰረት ማጣራት
+                const filteredSales = sales.filter(sale => {
+                    const rawDate = sale.createdAt || sale.date;
+                    if (!rawDate) return false;
+                    
+                    const saleDate = new Date(rawDate);
+                    if (isNaN(saleDate.getTime())) return false;
+
+                    const saleYearMonth = saleDate.toISOString().split("T")[0].slice(0, 7);
+                    return saleYearMonth === selectedYearMonth;
+                });
+
+                renderReport(filteredSales);
+            } catch (error) {
+                console.error("Fetch error:", error);
+                repTableBody.innerHTML = `<tr><td colspan="8" class="empty-message">Server connection failed.</td></tr>`;
+            }
+        }
+
+        function renderReport(sales) {
+            repTableBody.innerHTML = "";
+            let revenue = 0, items = 0, cash = 0, telebirr = 0, bank = 0;
+
+            if (!sales || sales.length === 0) {
+                repTableBody.innerHTML = `<tr><td colspan="8" class="empty-message">በዚህ ወር የተመዘገበ ሽያጭ የለም።</td></tr>`;
+            }
+
+            sales.forEach(sale => {
+                const total = Number(sale.total) || 0;
+                revenue += total;
+                items += Number(sale.quantity) || 0;
+
+                if (sale.paymentMethod === "Cash") cash += total;
+                if (sale.paymentMethod === "Telebirr") telebirr += total;
+                if (sale.paymentMethod === "Bank") bank += total;
+
+                const rawDate = sale.createdAt || sale.date;
+                const saleDate = rawDate ? new Date(rawDate) : new Date();
+                
+                const date = !isNaN(saleDate.getTime()) ? saleDate.toLocaleDateString("en-GB") : "-";
+                const time = !isNaN(saleDate.getTime()) ? saleDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : "-";
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${date}</td>
+                    <td>${time}</td>
+                    <td>${sale.category || "-"}</td>
+                    <td><b>${sale.itemName}</b></td>
+                    <td>${sale.quantity}</td>
+                    <td>${sale.price} ETB</td>
+                    <td><b>${total.toFixed(2)} ETB</b></td>
+                    <td>${sale.paymentMethod || "Cash"}</td>
+                `;
+                repTableBody.appendChild(row);
+            });
+
+            document.getElementById("repOrders").textContent = sales.length;
+            document.getElementById("repItems").textContent = items;
+            document.getElementById("repRevenue").textContent = revenue.toFixed(2) + " ETB";
+            document.getElementById("repCash").textContent = cash.toFixed(2) + " ETB";
+            document.getElementById("repTelebirr").textContent = telebirr.toFixed(2) + " ETB";
+            document.getElementById("repBank").textContent = bank.toFixed(2) + " ETB";
+        }
+
+        // ገጹ ሲከፈት የመጀመሪያውን ሪፖርት ማምጣት
+        fetchHistoricalSales();
+    </script>
+</body>
+</html>
