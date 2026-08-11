@@ -28,10 +28,6 @@
         <!-- DASHBOARD CARDS -->
         <section class="dashboard-cards">
             <div class="stat-card">
-                <h4>💰 Today's Total Sales</h4>
-                <h2 id="todayRevenue">0.00 ETB</h2>
-            </div>
-            <div class="stat-card">
                 <h4>🧾 Today's Orders</h4>
                 <h2 id="todayOrders">0</h2>
             </div>
@@ -40,8 +36,8 @@
                 <h2 id="todayItems">0</h2>
             </div>
             <div class="stat-card">
-                <h4>📊 Average Sales</h4>
-                <h2 id="averageSale">0.00 ETB</h2>
+                <h4>💰 Today's Total Sales</h4>
+                <h2 id="todayRevenue">0.00 ETB</h2>
             </div>
         </section>
 
@@ -212,12 +208,12 @@
             }
         }
 
-      function renderSales(sales) {
+        function renderSales(sales) {
             salesTableBody.innerHTML = "";
             let revenue = 0, items = 0, cash = 0, telebirr = 0, bank = 0;
 
             if (!sales || sales.length === 0) {
-                salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">ዛሬ ምንም ሽያጭ አልተመዘገበም።</td></tr>`;
+                salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">No sales to display.</td></tr>`;
             }
 
             sales.forEach(sale => {
@@ -232,7 +228,6 @@
                 const rawDate = sale.createdAt || sale.date;
                 const saleDate = rawDate ? new Date(rawDate) : new Date();
                 
-                // የ 20 ደቂቃ ገደብ ማረጋገጫ (ለተኑን ለማሰናከል)
                 const isExpired = (new Date() - saleDate) > (20 * 60 * 1000);
                 const deleteDisabled = isExpired ? "disabled style='opacity:0.3; cursor:not-allowed;'" : "";
 
@@ -246,19 +241,18 @@
                     <td>${sale.category || "-"}</td>
                     <td><b>${sale.itemName}</b></td>
                     <td>${sale.quantity}</td>
-                    <td>${sale.price} ብር</td>
-                    <td><b>${total.toFixed(2)} ብር</b></td>
+                    <td>${sale.price} ETB</td>
+                    <td><b>${total.toFixed(2)} ETB</b></td>
                     <td>${sale.paymentMethod || "Cash"}</td>
                     <td>
-                        <button class="delete-btn" ${deleteDisabled} onclick="deleteSale('${sale._id}')">ሰርዝ</button>
+                        <button class="delete-btn" ${deleteDisabled} onclick="deleteSale('${sale._id}')">🗑️ delete</button>
                     </td>
                 `;
                 salesTableBody.appendChild(row);
             });
-            document.getElementById("todayRevenue").textContent = revenue.toFixed(2) + " ETB";
             document.getElementById("todayOrders").textContent = sales.length;
             document.getElementById("todayItems").textContent = items;
-            document.getElementById("averageSale").textContent = (sales.length ? revenue / sales.length : 0).toFixed(2) + " ETB";
+            document.getElementById("todayRevenue").textContent = revenue.toFixed(2) + " ETB";
             document.getElementById("cashTotal").textContent = cash.toFixed(2) + " ETB";
             document.getElementById("telebirrTotal").textContent = telebirr.toFixed(2) + " ETB";
             document.getElementById("bankTotal").textContent = bank.toFixed(2) + " ETB";
@@ -303,8 +297,7 @@
             }
         });
 
-       window.deleteSale = async function (id) {
-            // ከላይ በተን የተሰናከለ ቢሆንም፣ በስህተት እንዳይሰረዝ እዚህም ተጨማሪ ቼክ ማድረግ ይቻላል
+        window.deleteSale = async function (id) {
             if (!confirm("ይህን ሽያጭ በእርግጥ መሰረዝ ይፈልጋሉ?")) return;
 
             try {
@@ -316,6 +309,7 @@
                 alert("ይህ ሽያጭ ከተመዘገበ 20 ደቂቃ በላይ ስለሆነ መሰረዝ አይቻልም።");
             }
         };
+
         calculateTotal();
         fetchSales();
     </script>
