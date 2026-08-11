@@ -29,7 +29,7 @@
         <section class="dashboard-cards">
             <div class="stat-card">
                 <h4>💰 Today's Total Sales</h4>
-                <h2 id="todayRevenue">0.00 ብር</h2>
+                <h2 id="todayRevenue">0.00 ETB</h2>
             </div>
             <div class="stat-card">
                 <h4>🧾 Today's Orders</h4>
@@ -40,8 +40,8 @@
                 <h2 id="todayItems">0</h2>
             </div>
             <div class="stat-card">
-                <h4>📊 Average Sale</h4>
-                <h2 id="averageSale">0.00 ብር</h2>
+                <h4>📊 Average Sales</h4>
+                <h2 id="averageSale">0.00 ETB</h2>
             </div>
         </section>
 
@@ -64,7 +64,7 @@
 
         <!-- NEW SALE -->
         <section class="form-card">
-            <h3>🛒 Add New Sale</h3>
+            <h3>🛒 Add New Sales</h3>
             <form id="salesForm">
                 <div class="row">
                     <div class="form-group">
@@ -113,7 +113,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">💾 Save Sale</button>
+                <button type="submit" class="submit-btn">💾 Save Sales</button>
             </form>
         </section>
 
@@ -245,7 +245,7 @@
                     <td>${sale.price} ETB</td>
                     <td><b>${total.toFixed(2)} ETB</b></td>
                     <td>${sale.paymentMethod || "Cash"}</td>
-                    <td><button class="delete-btn" onclick="deleteSale('${sale._id}')">ሰርዝ</button></td>
+                    <td><button class="delete-btn" onclick="deleteSale('${sale._id}')">🗑️ Delete</button></td>
                 `;
                 salesTableBody.appendChild(row);
             });
