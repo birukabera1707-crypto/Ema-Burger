@@ -6,25 +6,24 @@
     <title>EMA Burger - Sales Reports</title>
     <link rel="stylesheet" href="Style/style.css">
 </head>
-<body>
+<body style="background-color: #f4f7f6;">
 
-    <!-- NAVBAR -->
-    <nav class="navbar" style="display: flex; justify-content: space-between; align-items: center;">
+    <!-- NAVBAR (ጥቁር ባክግራውንድ እና ወደ ዳሽቦርድ መመለሻ በተን ብቻ) -->
+    <nav class="navbar" style="display: flex; justify-content: space-between; align-items: center; background-color: #111111; padding: 15px 30px; color: white;">
         <div class="logo-container" style="display: flex; align-items: center; gap: 10px;">
-            <img src="Style/logo.png" alt="EMA Burger Logo">
-            <h1>EMA BURGER</h1>
+            <img src="Style/logo.png" alt="EMA Burger Logo" style="height: 35px;">
+            <h1 style="margin: 0; font-size: 20px;">EMA BURGER</h1>
         </div>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <a href="index.html" class="submit-btn" style="text-decoration: none; padding: 8px 15px; background: #6c757d; font-size: 14px; border-radius: 5px;">📊 Dashboard</a>
-            <a href="reports.html" class="submit-btn" style="text-decoration: none; padding: 8px 15px; background: #1e3c72; font-size: 14px; border-radius: 5px;">📈 Reports</a>
+        <div>
+            <a href="index.html" class="submit-btn" style="text-decoration: none; padding: 8px 18px; background: #2575fc; color: white; font-size: 14px; font-weight: bold; border-radius: 5px;">📊 Dashboard</a>
         </div>
     </nav>
 
     <!-- MAIN -->
-    <main class="container">
+    <main class="container" style="padding: 20px;">
         
-        <!-- COMPACT DATE RANGE SELECTOR (ጽሑፎቹ ጠፍተዋል) -->
-        <div class="form-card" style="margin-bottom: 25px; padding: 12px 15px; display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; border-left: 5px solid #1e3c72;">
+        <!-- COMPACT DATE RANGE SELECTOR (ቀኖች እና ፈልግ በተን ጎን ለጎን) -->
+        <div class="form-card" style="margin-bottom: 25px; padding: 15px; display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end; border-left: 5px solid #2575fc; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
             <div>
                 <label for="startDate" style="font-size: 13px; color: #666; display: block; margin-bottom: 3px;">ከ (From):</label>
                 <input type="date" id="startDate" style="padding: 7px 10px; font-size: 14px; border-radius: 5px; border: 1px solid #ccc;">
@@ -33,27 +32,27 @@
                 <label for="endDate" style="font-size: 13px; color: #666; display: block; margin-bottom: 3px;">እስከ (To):</label>
                 <input type="date" id="endDate" style="padding: 7px 10px; font-size: 14px; border-radius: 5px; border: 1px solid #ccc;">
             </div>
-            <button onclick="fetchHistoricalSales()" class="submit-btn" style="padding: 8px 18px; background: #1e3c72; cursor: pointer; font-size: 14px; margin: 0;">🔍 ፈልግ</button>
+            <button onclick="fetchHistoricalSales()" class="submit-btn" style="padding: 8px 18px; background: #2575fc; color: white; cursor: pointer; font-size: 14px; margin: 0; border: none; border-radius: 5px; font-weight: bold;">🔍 ፈልግ</button>
         </div>
 
         <!-- DASHBOARD CARDS -->
         <section class="dashboard-cards">
-            <div class="stat-card" style="border-top: 4px solid #1e3c72;">
+            <div class="stat-card" style="border-top: 4px solid #2575fc;">
                 <h4>🧾 Total Orders</h4>
                 <h2 id="repOrders">0</h2>
             </div>
-            <div class="stat-card" style="border-top: 4px solid #1e3c72;">
+            <div class="stat-card" style="border-top: 4px solid #2575fc;">
                 <h4>🍔 Total Sold Items</h4>
                 <h2 id="repItems">0</h2>
             </div>
-            <div class="stat-card" style="border-top: 4px solid #1e3c72;">
+            <div class="stat-card" style="border-top: 4px solid #2575fc;">
                 <h4>💰 Total Revenue</h4>
                 <h2 id="repRevenue">0.00 ETB</h2>
             </div>
         </section>
 
         <!-- PAYMENT SUMMARY -->
-        <h3 style="margin-top: 30px; border-bottom: 2px solid #ddd; padding-bottom: 5px;">💳 Payment Method Breakdown</h3>
+        <h3 style="margin-top: 30px; border-bottom: 2px solid #ddd; padding-bottom: 5px; color: #333;">💳 Payment Method Breakdown</h3>
         <section class="payment-cards">
             <div class="payment-card">
                 <h3>💵 Cash</h3>
@@ -70,11 +69,11 @@
         </section>
 
         <!-- SALES TABLE -->
-        <h3 id="tableTitle" style="margin-top: 40px;">📋 Detailed Sales Records</h3>
+        <h3 id="tableTitle" style="margin-top: 40px; color: #333;">📋 Detailed Sales Records</h3>
         <div class="table-container">
             <table>
                 <thead>
-                    <tr style="background: #1e3c72; color: white;">
+                    <tr style="background: #2575fc; color: white;">
                         <th>Date</th>
                         <th>Time</th>
                         <th>Category</th>
