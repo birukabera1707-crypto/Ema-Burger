@@ -4,167 +4,309 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMA Burger - Sales Management</title>
-    <!-- ፋይሉ client ፎልደር ውስጥ ስላለ Style ፎልደርን በትክክለኛው አድራሻ ጠርተናል -->
     <link rel="stylesheet" href="Style/style.css">
 </head>
 <body>
 
-    <!-- ናቭባር (ከ አርማ/Logo ጋር) -->
-    <div class="navbar">
-        <div class="logo-container" style="display: flex; align-items: center; gap: 12px;">
-            <!-- የሎጎ ምስልህ የሚቀመጥበት ቦታ (logo.png የሚለውን የሎጎህን ስም አድርገው) -->
-            <img src="Style/logo.png" alt="EMA Burger Logo" style="width: 45px; height: 45px; object-fit: cover; border-radius: 50%; border: 2px solid #D89B45;">
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="Style/logo.png" alt="EMA Burger Logo">
             <h1>EMA BURGER</h1>
         </div>
         <span>Sales Management</span>
-    </div>
+    </nav>
 
-    <div class="container">
-        <h2>የዕለቱ የሽያጭ ዳሽቦርድ</h2>
+    <!-- MAIN -->
+    <main class="container">
+        <h2>የዛሬ የሽያጭ ዳሽቦርድ</h2>
 
-        <!-- የሽያጭ ማስገቢያ ፎርም -->
-        <div class="form-card">
+        <div class="date-box">
+            📅 ዛሬ: <span id="todayDate"></span>
+        </div>
+
+        <!-- DASHBOARD CARDS -->
+        <section class="dashboard-cards">
+            <div class="stat-card">
+                <h4>💰 የዛሬ ጠቅላላ ሽያጭ</h4>
+                <h2 id="todayRevenue">0.00 ብር</h2>
+            </div>
+            <div class="stat-card">
+                <h4>🧾 የዛሬ Orders</h4>
+                <h2 id="todayOrders">0</h2>
+            </div>
+            <div class="stat-card">
+                <h4>🍔 የተሸጡ Items</h4>
+                <h2 id="todayItems">0</h2>
+            </div>
+            <div class="stat-card">
+                <h4>📊 Average Sale</h4>
+                <h2 id="averageSale">0.00 ብር</h2>
+            </div>
+        </section>
+
+        <!-- PAYMENT SUMMARY -->
+        <h3>የዛሬ የክፍያ ማጠቃለያ</h3>
+        <section class="payment-cards">
+            <div class="payment-card">
+                <h3>💵 Cash</h3>
+                <strong id="cashTotal">0.00 ብር</strong>
+            </div>
+            <div class="payment-card">
+                <h3>📱 Telebirr</h3>
+                <strong id="telebirrTotal">0.00 ብር</strong>
+            </div>
+            <div class="payment-card">
+                <h3>🏦 Bank</h3>
+                <strong id="bankTotal">0.00 ብር</strong>
+            </div>
+        </section>
+
+        <!-- NEW SALE -->
+        <section class="form-card">
+            <h3>🛒 አዲስ ሽያጭ መመዝገቢያ</h3>
             <form id="salesForm">
-                <div class="form-group">
-                    <label for="itemName">የምግብ/መጠጥ ስም:</label>
-                    <input type="text" id="itemName" placeholder="ምሳሌ፦ በርገር፣ ፒዛ፣ ማኪያቶ" required>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="category">የምርት ምድብ</label>
+                        <select id="category" required>
+                            <option value="">-- ምድብ ይምረጡ --</option>
+                            <option value="Burger">🍔 Burger</option>
+                            <option value="Pizza">🍕 Pizza</option>
+                            <option value="Juice">🧃 Juice</option>
+                            <option value="Soft Drink">🥤 Soft Drink</option>
+                            <option value="Coffee">☕ Coffee</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="itemName">የምርት ስም</label>
+                        <select id="itemName" required>
+                            <option value="">-- ምርት ይምረጡ --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">ብዛት</label>
+                        <input type="number" id="quantity" value="1" min="1" required>
+                    </div>
                 </div>
 
                 <div class="row">
-                    <div class="col form-group">
-                        <label for="quantity">ብዛት (Qty):</label>
-                        <input type="number" id="quantity" value="1" min="1" required>
+                    <div class="form-group">
+                        <label for="price">ያንዱ ዋጋ</label>
+                        <input type="number" id="price" placeholder="0.00" min="0" step="0.01" required>
                     </div>
-                    <div class="col form-group">
-                        <label for="price">ያንዱ ዋጋ (Unit Price):</label>
-                        <input type="number" id="price" placeholder="0.00" required>
-                    </div>
-                    <div class="col form-group">
-                        <label for="paymentMethod">የክፍያ መንገድ:</label>
+
+                    <div class="form-group">
+                        <label for="paymentMethod">የክፍያ መንገድ</label>
                         <select id="paymentMethod">
-                            <option value="Cash">ጥሬ ገንዘብ (Cash)</option>
-                            <option value="Telebirr">ቴሌብር (Telebirr)</option>
-                            <option value="Bank">ባንክ (Bank)</option>
+                            <option value="Cash">💵 Cash</option>
+                            <option value="Telebirr">📱 Telebirr</option>
+                            <option value="Bank">🏦 Bank</option>
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="saleTotal">ጠቅላላ ዋጋ</label>
+                        <input type="text" id="saleTotal" value="0.00 ብር" readonly>
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">ሽያጩን መዝግብ</button>
+                <button type="submit" class="submit-btn">💾 ሽያጩን መዝግብ</button>
             </form>
-        </div>
+        </section>
 
-        <!-- የጠቅላላ ገቢ ማጠቃለያ -->
-        <div class="summary-box">
-            <h3>አጠቃላይ ገቢ (Total Revenue)</h3>
-            <h2 id="totalRevenueDisplay">0.00 ብር</h2>
-        </div>
-
-        <!-- የሽያጭ ዝርዝር ሰንጠረዥ -->
-        <h3>የተመዘገቡ ሽያጮች ዝርዝር</h3>
+        <!-- TODAY SALES -->
+        <h3>📋 Today's Sales</h3>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>ሰዓት</th>
-                        <th>እቃ</th>
-                        <th>ብዛት</th>
-                        <th>ዋጋ</th>
-                        <th>ድምር</th>
-                        <th>ክፍያ</th>
-                        <th>እርምጃ</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Payment</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="salesTableBody">
-                    <!-- ጃቫስክሪፕት ዳታዎችን ከ MongoDB አምጥቶ እዚህ ይጨምራል -->
+                    <tr>
+                        <td colspan="9" class="empty-message">ዛሬ ምንም ሽያጭ አልተመዘገበም።</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
-    </div>
+    </main>
 
-<script>
-    const API_URL = 'http://localhost:5000/api/sales';
+    <!-- JAVASCRIPT -->
+    <script>
+        const API_URL = "/api/sales";
+        const salesForm = document.getElementById("salesForm");
+        const salesTableBody = document.getElementById("salesTableBody");
 
-    const salesForm = document.getElementById('salesForm');
-    const salesTableBody = document.getElementById('salesTableBody');
-    const totalRevenueDisplay = document.getElementById('totalRevenueDisplay');
+        const products = {
+            Burger: ["Special Burger", "Chicken Burger", "Cheese Burger"],
+            Pizza: ["Special Pizza", "Chicken Pizza", "Cheese Pizza"],
+            Juice: ["Mango Juice", "Avocado Juice", "Papaya Juice", "Mixed Juice"],
+            "Soft Drink": ["Coca Cola", "Pepsi", "Mirinda", "Sprite"],
+            Coffee: ["Macchiato", "Espresso", "Cappuccino", "Tea"]
+        };
 
-    // 1. ከ MongoDB Atlas (Backend) ሽያጮችን አምጥቶ ማሳያ
-    async function fetchSales() {
-        try {
-            const response = await fetch(API_URL);
-            const sales = await response.json();
-            
-            salesTableBody.innerHTML = '';
-            let totalRevenue = 0;
+        function showTodayDate() {
+            const today = new Date();
+            document.getElementById("todayDate").textContent = today.toLocaleDateString("en-GB");
+        }
+        showTodayDate();
 
-            sales.forEach((sale) => {
-                totalRevenue += sale.total;
+        document.getElementById("category").addEventListener("change", function () {
+            const category = this.value;
+            const itemSelect = document.getElementById("itemName");
+            itemSelect.innerHTML = `<option value="">-- ምርት ይምረጡ --</option>`;
+            if (!products[category]) return;
 
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${sale.date}</td>
+            products[category].forEach(product => {
+                const option = document.createElement("option");
+                option.value = product;
+                option.textContent = product;
+                itemSelect.appendChild(option);
+            });
+        });
+
+        function calculateTotal() {
+            const quantity = Number(document.getElementById("quantity").value) || 0;
+            const price = Number(document.getElementById("price").value) || 0;
+            const total = quantity * price;
+            document.getElementById("saleTotal").value = total.toFixed(2) + " ብር";
+        }
+
+        document.getElementById("quantity").addEventListener("input", calculateTotal);
+        document.getElementById("price").addEventListener("input", calculateTotal);
+
+        async function fetchSales() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error("Server Error");
+
+                const sales = await response.json();
+                const now = new Date();
+                const today = now.toISOString().split("T")[0];
+
+                const todaySales = sales.filter(sale => {
+                    const date = new Date(sale.createdAt || sale.date);
+                    return date.toISOString().split("T")[0] === today;
+                });
+
+                renderSales(todaySales);
+            } catch (error) {
+                console.error("Fetch error:", error);
+                salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">Server connection failed.</td></tr>`;
+            }
+        }
+
+        function renderSales(sales) {
+            salesTableBody.innerHTML = "";
+            let revenue = 0, items = 0, cash = 0, telebirr = 0, bank = 0;
+
+            if (sales.length === 0) {
+                salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">ዛሬ ምንም ሽያጭ አልተመዘገበም።</td></tr>`;
+            }
+
+            sales.forEach(sale => {
+                const total = Number(sale.total) || 0;
+                revenue += total;
+                items += Number(sale.quantity) || 0;
+
+                if (sale.paymentMethod === "Cash") cash += total;
+                if (sale.paymentMethod === "Telebirr") telebirr += total;
+                if (sale.paymentMethod === "Bank") bank += total;
+
+                const saleDate = new Date(sale.createdAt || sale.date);
+                const date = saleDate.toLocaleDateString("en-GB");
+                const time = saleDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${date}</td>
+                    <td>${time}</td>
+                    <td>${sale.category || "-"}</td>
                     <td><b>${sale.itemName}</b></td>
                     <td>${sale.quantity}</td>
                     <td>${sale.price} ብር</td>
-                    <td style="font-weight: bold; color: #3B2A22;">${sale.total} ብር</td>
+                    <td><b>${total.toFixed(2)} ብር</b></td>
                     <td>${sale.paymentMethod}</td>
                     <td><button class="delete-btn" onclick="deleteSale('${sale._id}')">ሰርዝ</button></td>
                 `;
-                salesTableBody.appendChild(tr);
+                salesTableBody.appendChild(row);
             });
 
-            totalRevenueDisplay.innerText = totalRevenue.toFixed(2) + ' ብር';
-        } catch (err) {
-            console.error('Error fetching sales:', err);
+            document.getElementById("todayRevenue").textContent = revenue.toFixed(2) + " ብር";
+            document.getElementById("todayOrders").textContent = sales.length;
+            document.getElementById("todayItems").textContent = items;
+            document.getElementById("averageSale").textContent = (sales.length ? revenue / sales.length : 0).toFixed(2) + " ብር";
+            document.getElementById("cashTotal").textContent = cash.toFixed(2) + " ብር";
+            document.getElementById("telebirrTotal").textContent = telebirr.toFixed(2) + " ብር";
+            document.getElementById("bankTotal").textContent = bank.toFixed(2) + " ብር";
         }
-    }
 
-    // 2. አዲስ ሽያጭ ወደ MongoDB Atlas መላኪያ (POST)
-    salesForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
+        salesForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const category = document.getElementById("category").value;
+            const itemName = document.getElementById("itemName").value;
+            const quantity = Number(document.getElementById("quantity").value);
+            const price = Number(document.getElementById("price").value);
+            const paymentMethod = document.getElementById("paymentMethod").value;
 
-        const itemName = document.getElementById('itemName').value;
-        const quantity = Number(document.getElementById('quantity').value);
-        const price = Number(document.getElementById('price').value);
-        const paymentMethod = document.getElementById('paymentMethod').value;
+            if (!category || !itemName || quantity <= 0 || price < 0) {
+                alert("እባክዎ መረጃውን በትክክል ይሙሉ።");
+                return;
+            }
 
-        const newSale = { itemName, quantity, price, paymentMethod };
+            const newSale = {
+                category, itemName, quantity, price, paymentMethod,
+                total: quantity * price,
+                date: new Date().toISOString()
+            };
 
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newSale)
-            });
+            try {
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(newSale)
+                });
 
-            if (response.ok) {
+                if (!response.ok) throw new Error("Save failed");
+
                 salesForm.reset();
-                document.getElementById('quantity').value = 1;
-                fetchSales(); // ሰንጠረዡን በድጋሚ በማደስ አዲሱን ዳታ ማሳየት
+                document.getElementById("quantity").value = 1;
+                document.getElementById("itemName").innerHTML = `<option value="">-- ምርት ይምረጡ --</option>`;
+                calculateTotal();
+                await fetchSales();
+            } catch (error) {
+                console.error("Save error:", error);
+                alert("ሽያጩን መመዝገብ አልተቻለም።");
             }
-        } catch (err) {
-            console.error('Error saving sale:', err);
-        }
-    });
+        });
 
-    // 3. ሽያጭ ከዳታቤዝ መሰረጂያ (DELETE)
-    window.deleteSale = async function(id) {
-        try {
-            const response = await fetch(`${API_URL}/${id}`, {
-                method: 'DELETE'
-            });
+        window.deleteSale = async function (id) {
+            if (!confirm("ይህን ሽያጭ መሰረዝ ይፈልጋሉ?")) return;
 
-            if (response.ok) {
-                fetchSales();
+            try {
+                const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+                if (!response.ok) throw new Error("Delete failed");
+                await fetchSales();
+            } catch (error) {
+                console.error("Delete error:", error);
+                alert("ሽያጩን መሰረዝ አልተቻለም።");
             }
-        } catch (err) {
-            console.error('Error deleting sale:', err);
-        }
-    };
+        };
 
-    // ገጹ ሲከፈት ዳታዎችን ከሰርቨር መጫን
-    fetchSales();
-</script>
-
+        calculateTotal();
+        fetchSales();
+    </script>
 </body>
 </html>
