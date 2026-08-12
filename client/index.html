@@ -15,7 +15,7 @@
             <h1>EMA BURGER</h1>
         </div>
        <div style="display: flex; gap: 10px; align-items: center;">
-            <a href="reports.html" style="text-decoration: none; padding: 8px 18px; background: #0f0f0f; color: white; font-size: 14px; font-weight: bold; border-radius: 5px;">📈 Reports</a>
+            <a href="reports.html" id="reportsBtn" style="text-decoration: none; padding: 8px 18px; background: #0f0f0f; color: white; font-size: 14px; font-weight: bold; border-radius: 5px; display: none;">📈 Reports</a>
             <button onclick="logout()" style="padding: 8px 15px; background: #dc3545; color: white; border: none; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer;">🚪 Logout</button>
         </div>
     </nav>
@@ -123,9 +123,15 @@
             window.location.href = "login.html";
         }
 
+        // ባለቤቱ (Owner) ከሆነ ብቻ የ Reports ቁልፍን ማሳየት
+        if (userRole === "owner") {
+            document.getElementById("reportsBtn").style.display = "inline-block";
+        }
+
         // 2. የ Logout ተግባር
         function logout() {
             localStorage.removeItem("userRole");
+            localStorage.removeItem("username");
             window.location.href = "login.html";
         }
 
@@ -154,7 +160,7 @@
             Burger: ["Special Burger", "Chicken Burger", "Cheese Burger"],
             Pizza: ["Special Pizza", "Chicken Pizza", "Cheese Pizza"],
             Juice: ["Mango Juice", "Avocado Juice", "Papaya Juice", "Special Juice"],
-            "Soft Drink": ["Coca Cola", "Pepsi", "Mirinda", "Sprite","Fanta"],
+            "Soft Drink": ["Coca Cola", "Pepsi", "Mirinda", "Sprite", "Fanta"],
             Coffee: ["Macchiato", "Espresso", "Cappuccino", "Tea"]
         };
 

@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const path = require('path'); // 1. path ን እዚህ እናስገባዋለን
+const path = require('path');
 const Sale = require('./models/Sale');
+const Cashier = require('./models/Cashier'); // 1. የካሸር ሞዴልን ማስገባት
 
 const app = express();
 app.use(express.json());
@@ -21,6 +22,8 @@ mongoose.connect(MONGO_URI)
 .catch((err) => {
     console.log('Database connection error:', err);
 });
+
+// ==================== SALES ROUTES ====================
 
 // 1. ሁሉንም ሽያጮች ከዳታቤዝ ለማምጣት (GET)
 app.get('/api/sales', async (req, res) => {
@@ -68,7 +71,7 @@ app.delete('/api/sales/:id', async (req, res) => {
         const now = new Date();
         const diffMinutes = (now - saleDate) / (1000 * 60);
 
-        // ከ 20 ደቂቃ በላይ ከሆነ ማጥፋት አይቻልም (ሞባይልም ሆነ ፒሲ ላይ ይሰራል)
+        // ከ 20 ደቂቃ በላይ ከሆነ ማጥፋት አይቻልም
         if (diffMinutes > 20) {
             return res.status(400).json({ error: 'ይህ ሽያጭ ከተመዘገበ 20 ደቂቃ በላይ ስለሆነ መሰረዝ አይቻልም።' });
         }
@@ -79,6 +82,78 @@ app.delete('/api/sales/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+
+// ==================== CASHIER ROUTES ====================
+
+// 1. የካሸር ሎጊን ማረጋገጫ (Login API - ሞባይል እና ፒሲ ላይ በአንድነት ይሰራሉ)
+app.post('/api/cashiers/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const cashier = await Cashier.findOne({ username, password });
+        if (cashier) {
+            res.json({ success: true, role: "cashier" });
+        } else {
+            res.status(401).json({ success: false, error: "Invalid Username or Password" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 2. የተመዘገቡ ካሸሮችን ዝርዝር ማምጣት (ለባለቤቱ ዳሽቦርድ)
+app.get('/api/cashiers', async (req, res) => {
+    try {
+        const cashiers = await Cashier.find().sort({ _id: -1 });
+        res.json(cashiers);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 3. አዲስ ካሸር መመዝገቢያ (በባለቤቱ ብቻ የሚደረግ)
+app.post('/api/cashiers', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const newCashier = new Cashier({ username, password });
+        const savedCashier = await newCashier.save();
+        res.status(201).json(savedCashier);
+    } catch (err) {
+        res.status(400).json({ error: 'Username already exists or invalid data' });
+    }
+});
+
+// 4. የካሸር የይለፍ ቃል ማስተካከያ (በባለቤቱ ብቻ የሚደረግ)
+app.put('/api/cashiers/:id', async (req, res) => {
+    try {
+        const { password } = req.body;
+        const updatedCashier = await Cashier.findByIdAndUpdate(
+            req.params.id,
+            { password },
+            { new: true }
+        );
+        if (!updatedCashier) {
+            return res.status(404).json({ error: 'Cashier not found' });
+        }
+        res.json({ message: 'Password updated successfully by owner', updatedCashier });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 5. ካሸርን ከዳታቤዝ መሰረዝ (በባለቤቱ ብቻ)
+app.delete('/api/cashiers/:id', async (req, res) => {
+    try {
+        const deletedCashier = await Cashier.findByIdAndDelete(req.params.id);
+        if (!deletedCashier) {
+            return res.status(404).json({ error: 'Cashier not found' });
+        }
+        res.json({ message: 'Cashier deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 // ሰርቨሩ የሚጀምርበት ፖርት (Render በራሱ ፖርት እንዲሰጠው process.env.PORT እንጠቀማለን)
 const PORT = process.env.PORT || 5000;

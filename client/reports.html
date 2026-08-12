@@ -47,8 +47,9 @@
             <img src="Style/logo.png" alt="EMA Burger Logo" style="height: 35px;">
             <h1 style="margin: 0; font-size: 20px; color: #F5F0E6;">EMA BURGER</h1>
         </div>
-        <div style="display: flex; gap: 8px; align-items: center;">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <button onclick="openRegisterModal()" style="padding: 6px 12px; background: #D89B45; color: #1F211E; border: none; font-size: 13px; font-weight: bold; border-radius: 4px; cursor: pointer;">➕ Register</button>
+            <button onclick="openManageModal()" style="padding: 6px 12px; background: #D89B45; color: #1F211E; border: none; font-size: 13px; font-weight: bold; border-radius: 4px; cursor: pointer;">👥 Manage</button>
             <a href="index.html" style="text-decoration: none; padding: 6px 12px; background: #A8B99A; color: #1F211E; font-size: 13px; font-weight: bold; border-radius: 4px; display: inline-block;">📊 Dashboard</a>
             <button onclick="logout()" style="padding: 6px 12px; background: #3B2A22; color: #F5F0E6; border: none; font-size: 13px; font-weight: bold; border-radius: 4px; cursor: pointer;">🚪 Logout</button>
         </div>
@@ -70,6 +71,27 @@
                 </div>
                 <button type="submit" style="width: 100%; padding: 10px; background: #A8B99A; color: #1F211E; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 14px;">💾 Register</button>
             </form>
+        </div>
+    </div>
+
+    <!-- MANAGE CASHIERS MODAL -->
+    <div id="manageModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <span class="close-btn" onclick="closeManageModal()">&times;</span>
+            <h3 style="margin-top: 0; color: #3B2A22; font-size: 18px;">👥 Registered Cashiers List</h3>
+            <div style="max-height: 300px; overflow-y: auto; margin-top: 15px;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 13px;">
+                    <thead>
+                        <tr style="background: #3B2A22; color: #F5F0E6;">
+                            <th style="padding: 8px;">Username</th>
+                            <th style="padding: 8px; text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cashierListTableBody">
+                        <tr><td colspan="2" style="padding: 10px; text-align: center;">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -105,7 +127,7 @@
             </div>
         </section>
 
-        <!-- PAYMENT SUMMARY (Optional or Total Cash) -->
+        <!-- PAYMENT SUMMARY -->
         <h3 style="margin-top: 30px; border-bottom: 2px solid #A8B99A; padding-bottom: 5px; color: #3B2A22;">💳 Payment Summary</h3>
         <section class="payment-cards" style="display: flex; gap: 15px; flex-wrap: wrap;">
             <div class="payment-card" style="flex: 1; min-width: 150px; background: #FFFFFF; padding: 15px; border-radius: 8px; border-left: 4px solid #A8B99A; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
@@ -116,8 +138,8 @@
 
         <!-- SALES TABLE -->
         <h3 id="tableTitle" style="margin-top: 40px; color: #3B2A22;">📋 Detailed Sales Records</h3>
-        <div class="table-container" style="background: #FFFFFF; border-radius: 8px; box-shadow: 0 4px 15px rgba(59,42,34,0.1); overflow: hidden;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <div class="table-container" style="background: #FFFFFF; border-radius: 8px; box-shadow: 0 4px 15px rgba(59,42,34,0.1); overflow-x: auto;">
+            <table style="width: 100%; min-width: 650px; border-collapse: collapse; text-align: left;">
                 <thead>
                     <tr style="background: #3B2A22; color: #F5F0E6;">
                         <th style="padding: 12px;">Date</th>
@@ -140,7 +162,7 @@
 
     <!-- JAVASCRIPT -->
     <script>
-        // 1. ሎጊን ማድረጉን ማረጋገጥ እና የካሸርዋን እግድ ማስተካከል
+        // 1. ሎጊን ማድረጉን ማረጋገጥ እና የካሸርን መግባት መከልከል
         const userRole = localStorage.getItem("userRole");
         if (!userRole) {
             window.location.href = "login.html";
@@ -152,10 +174,11 @@
         // 2. የ Logout ተግባር
         function logout() {
             localStorage.removeItem("userRole");
+            localStorage.removeItem("username");
             window.location.href = "login.html";
         }
 
-        // 3. Modal መክፈቻ እና መዝጊያ ተግባራት
+        // 3. Register Modal መክፈቻ እና መዝጊያ
         function openRegisterModal() {
             document.getElementById("registerModal").style.display = "flex";
         }
@@ -163,34 +186,126 @@
             document.getElementById("registerModal").style.display = "none";
         }
 
-        // 4. አዲስ ካሸር መመዝገብ (LocalStorage ላይ ማስቀመጥ)
-        document.getElementById("registerCashierForm").addEventListener("submit", function(e) {
+        // 4. Manage Modal መክፈቻ እና መዝጊያ
+        function openManageModal() {
+            document.getElementById("manageModal").style.display = "flex";
+            fetchCashiers();
+        }
+        function closeManageModal() {
+            document.getElementById("manageModal").style.display = "none";
+        }
+
+        // 5. አዲስ ካሸር በ MongoDB ዳታቤዝ ውስጥ መመዝገብ
+        document.getElementById("registerCashierForm").addEventListener("submit", async function(e) {
             e.preventDefault();
             const newUser = document.getElementById("newCashierUser").value.trim();
             const newPass = document.getElementById("newCashierPass").value.trim();
 
-            if (newUser === "owner") {
+            if (newUser.toLowerCase() === "owner") {
                 alert("ይህንን ስም መጠቀም አይችሉም!");
                 return;
             }
 
-            let savedCashiers = JSON.parse(localStorage.getItem("emaCashiers")) || [];
-            
-            const exists = savedCashiers.some(c => c.username === newUser);
-            if (exists) {
-                alert("ይህ ካሸር ስም ቀደም ሲል ተመዝግቧል!");
-                return;
+            try {
+                const response = await fetch('/api/cashiers', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: newUser, password: newPass })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(`Cashier "${newUser}" Registered Successfully!`);
+                    document.getElementById("registerCashierForm").reset();
+                    closeRegisterModal();
+                } else {
+                    alert(data.error || "Registration failed!");
+                }
+            } catch (error) {
+                console.error("Error registering cashier:", error);
+                alert("Server connection failed!");
             }
-
-            savedCashiers.push({ username: newUser, password: newPass });
-            localStorage.setItem("emaCashiers", JSON.stringify(savedCashiers));
-
-            alert(`Cashier "${newUser}" Registered Successfully!`);
-            document.getElementById("registerCashierForm").reset();
-            closeRegisterModal();
         });
 
-        // 5. 10 ደቂቃ እንቅስቃሴ ከሌለ በራሱ ሎግአውት ማድረግ
+        // 6. የተመዘገቡ ካሸሮችን ከዳታቤዝ አምጥቶ ማሳየት
+        async function fetchCashiers() {
+            const tbody = document.getElementById("cashierListTableBody");
+            tbody.innerHTML = `<tr><td colspan="2" style="padding: 10px; text-align: center;">Loading...</td></tr>`;
+            try {
+                const response = await fetch('/api/cashiers');
+                const cashiers = await response.json();
+
+                tbody.innerHTML = "";
+                if (cashiers.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="2" style="padding: 10px; text-align: center;">No cashiers found.</td></tr>`;
+                    return;
+                }
+
+                cashiers.forEach(c => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td style="padding: 8px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;"><b>${c.username}</b></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #F5F0E6; text-align: center; display: flex; gap: 6px; justify-content: center;">
+                            <button onclick="updatePassword('${c._id}', '${c.username}')" style="padding: 4px 8px; background: #D89B45; color: #1F211E; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">🔑 Pass</button>
+                            <button onclick="deleteCashier('${c._id}', '${c.username}')" style="padding: 4px 8px; background: #c0392b; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">🗑 Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error fetching cashiers:", error);
+                tbody.innerHTML = `<tr><td colspan="2" style="padding: 10px; text-align: center; color: red;">Failed to load cashiers.</td></tr>`;
+            }
+        }
+
+        // 7. የካሸር የይለፍ ቃል ማስተካከል
+        async function updatePassword(id, username) {
+            const newPassword = prompt(`Enter new password for cashier "${username}":`);
+            if (!newPassword || newPassword.trim() === "") return;
+
+            try {
+                const response = await fetch(`/api/cashiers/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: newPassword.trim() })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert(`Password for "${username}" updated successfully!`);
+                } else {
+                    alert(data.error || "Failed to update password.");
+                }
+            } catch (error) {
+                console.error("Error updating password:", error);
+                alert("Server connection failed!");
+            }
+        }
+
+        // 8. ካሸርን ከዳታቤዝ መሰረዝ
+        async function deleteCashier(id, username) {
+            if (!confirm(`Are you sure you want to delete cashier "${username}"?`)) return;
+
+            try {
+                const response = await fetch(`/api/cashiers/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert(`Cashier "${username}" deleted successfully!`);
+                    fetchCashiers();
+                } else {
+                    alert(data.error || "Failed to delete cashier.");
+                }
+            } catch (error) {
+                console.error("Error deleting cashier:", error);
+                alert("Server connection failed!");
+            }
+        }
+
+        // 9. 10 ደቂቃ እንቅስቃሴ ከሌለ በራሱ ሎግአውት ማድረግ
         let inactivityTimer;
         function resetInactivityTimer() {
             clearTimeout(inactivityTimer);

@@ -5,39 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMA Burger - Login</title>
     <link rel="stylesheet" href="Style/style.css">
-    <style>
-        /* Modal Styling */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(59,42,34,0.5);
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-content {
-            background: #FFFFFF;
-            padding: 25px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 350px;
-            box-shadow: 0 4px 15px rgba(59,42,34,0.2);
-            position: relative;
-            border-left: 6px solid #D89B45;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 20px;
-            cursor: pointer;
-            color: #3B2A22;
-        }
-    </style>
 </head>
 <body style="background-color: #F5F0E6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif;">
 
@@ -56,94 +23,48 @@
                 <input type="text" id="username" required style="width: 100%; padding: 11px; font-size: 14px; border-radius: 6px; border: 1px solid #A8B99A; background-color: #F5F0E6; color: #3B2A22; box-sizing: border-box;">
             </div>
 
-            <div class="form-group" style="margin-bottom: 15px;">
+            <div class="form-group" style="margin-bottom: 20px;">
                 <label for="password" style="font-size: 13px; color: #3B2A22; display: block; margin-bottom: 5px; font-weight: 600;">Password</label>
                 <input type="password" id="password" required style="width: 100%; padding: 11px; font-size: 14px; border-radius: 6px; border: 1px solid #A8B99A; background-color: #F5F0E6; color: #3B2A22; box-sizing: border-box;">
-            </div>
-
-            <!-- FORGOT PASSWORD LINK -->
-            <div style="text-align: right; margin-bottom: 20px;">
-                <a href="#" onclick="openForgotModal()" style="color: #3B2A22; font-size: 12px; text-decoration: none; font-weight: 600;">Forgot Password?</a>
             </div>
 
             <button type="submit" class="submit-btn" style="width: 100%; padding: 12px; background: #D89B45; color: #1F211E; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s;">🔐 Login</button>
         </form>
     </div>
 
-    <!-- FORGOT PASSWORD MODAL -->
-    <div id="forgotModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeForgotModal()">&times;</span>
-            <h3 style="margin-top: 0; color: #3B2A22; font-size: 18px;">🔄 Forgot Password</h3>
-            <p style="font-size: 12px; color: #3B2A22; opacity: 0.8; margin-bottom: 15px;">username & new password</p>
-            
-            <form id="forgotForm">
-                <div style="margin-bottom: 12px;">
-                    <label style="font-size: 12px; color: #3B2A22; display: block; margin-bottom: 4px; font-weight: 600;">Cashier Username</label>
-                    <input type="text" id="forgotUser" required style="width: 100%; padding: 9px; font-size: 13px; border-radius: 5px; border: 1px solid #A8B99A; background-color: #F5F0E6; color: #3B2A22; box-sizing: border-box;">
-                </div>
-                
-                <div style="margin-bottom: 15px;">
-                    <label style="font-size: 12px; color: #3B2A22; display: block; margin-bottom: 4px; font-weight: 600;">New Password</label>
-                    <input type="password" id="forgotNewPass" required style="width: 100%; padding: 9px; font-size: 13px; border-radius: 5px; border: 1px solid #A8B99A; background-color: #F5F0E6; color: #3B2A22; box-sizing: border-box;">
-                </div>
-
-                <button type="submit" style="width: 100%; padding: 10px; background: #A8B99A; color: #1F211E; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 14px;">💾 Update Password</button>
-            </form>
-        </div>
-    </div>
-
     <script>
-        // Modal Functions
-        function openForgotModal() {
-            document.getElementById("forgotModal").style.display = "flex";
-        }
-        function closeForgotModal() {
-            document.getElementById("forgotModal").style.display = "none";
-        }
-
-        // Login Handler
-        document.getElementById("loginForm").addEventListener("submit", function(e) {
+        // Login Handler ( ከዳታቤዝ ጋር ማረጋገጫ )
+        document.getElementById("loginForm").addEventListener("submit", async function(e) {
             e.preventDefault();
-            const user = document.getElementById("username").value.trim();
-            const pass = document.getElementById("password").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
 
-            // 1. የባለቤቱ መለያ (owner ሲገባ ወደ index.html ዳሽቦርድ ይሄዳል)
-            if (user === "owner" && pass === "owner123") {
+            // 1. የባለቤቱ (Owner) አካውንት መሆኑን ማረጋገጥ
+            if (username === "owner" && password === "owner123") {
                 localStorage.setItem("userRole", "owner");
+                localStorage.setItem("username", username);
                 window.location.href = "index.html";
                 return;
             }
 
-            // 2. ባለቤቱ በ reports.html በኩል ያስመዘገባቸው አዳዲስ ካሸሮች ብቻ መኖራቸውን ማረጋገጥ
-            const savedCashiers = JSON.parse(localStorage.getItem("emaCashiers")) || [];
-            const foundCashier = savedCashiers.find(c => c.username === user && c.password === pass);
+            // 2. የካሸር መረጃዎችን ከሰርቨር/ዳታቤዝ ማረጋገጥ
+            try {
+                const response = await fetch("/api/cashiers");
+                if (!response.ok) throw new Error("Server error");
+                
+                const cashiers = await response.json();
+                const foundCashier = cashiers.find(c => c.username === username && c.password === password);
 
-            if (foundCashier) {
-                localStorage.setItem("userRole", "cashier");
-                window.location.href = "index.html";
-            } else {
-                alert("Invalid Username or Password!");
-            }
-        });
-
-        // Forgot Password Reset Handler
-        document.getElementById("forgotForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-            const fUser = document.getElementById("forgotUser").value.trim();
-            const fNewPass = document.getElementById("forgotNewPass").value.trim();
-
-            let savedCashiers = JSON.parse(localStorage.getItem("emaCashiers")) || [];
-            const cashierIndex = savedCashiers.findIndex(c => c.username === fUser);
-
-            if (cashierIndex !== -1) {
-                savedCashiers[cashierIndex].password = fNewPass;
-                localStorage.setItem("emaCashiers", JSON.stringify(savedCashiers));
-                alert(`Cashier "${fUser}" updated password successfully`);
-                closeForgotModal();
-                document.getElementById("forgotForm").reset();
-            } else {
-                alert("This username is not found!");
+                if (foundCashier) {
+                    localStorage.setItem("userRole", "cashier");
+                    localStorage.setItem("username", username);
+                    window.location.href = "index.html";
+                } else {
+                    alert("Invalid Username or Password!");
+                }
+            } catch (error) {
+                console.error("Login error:", error);
+                alert("ሰርቨር ጋር መገናኘት አልተቻለም። እባክዎ እንደገና ይሞክሩ።");
             }
         });
     </script>
