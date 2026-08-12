@@ -16,6 +16,7 @@
         </div>
        <div style="display: flex; gap: 10px; align-items: center;">
             <a href="reports.html" style="text-decoration: none; padding: 8px 18px; background: #0f0f0f; color: white; font-size: 14px; font-weight: bold; border-radius: 5px;">📈 Reports</a>
+            <button onclick="logout()" style="padding: 8px 15px; background: #dc3545; color: white; border: none; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer;">🚪 Logout</button>
         </div>
     </nav>
 
@@ -143,6 +144,37 @@
 
     <!-- JAVASCRIPT -->
     <script>
+        // 1. ሎጊን ማድረጉን ማረጋገጥ (ከሁሉም መጀመሪያ)
+        const userRole = localStorage.getItem("userRole");
+        if (!userRole) {
+            window.location.href = "login.html";
+        }
+
+        // 2. የ Logout ተግባር
+        function logout() {
+            localStorage.removeItem("userRole");
+            window.location.href = "login.html";
+        }
+
+        // 3. 10 ደቂቃ ምንም እንቅስቃሴ ከሌለ ራስ-ሰር ሎግአውት (Auto Logout Timer)
+        let inactivityTimer;
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            // 10 ደቂቃ = 10 * 60 * 1000 ሚሊሰከንድ
+            inactivityTimer = setTimeout(() => {
+                alert("እባክዎ በድጋሚ ይግቡ (Session Timeout due to inactivity)");
+                logout();
+            }, 10 * 60 * 1000);
+        }
+
+        // የተጠቃሚ እንቅስቃሴዎችን መከታተል (ማውዝ፣ ኪቦርድ፣ ስክሪን ንክኪ)
+        window.onload = resetInactivityTimer;
+        document.onmousemove = resetInactivityTimer;
+        document.onkeypress = resetInactivityTimer;
+        document.onclick = resetInactivityTimer;
+        document.onscroll = resetInactivityTimer;
+        document.ontouchstart = resetInactivityTimer; // ለሞባይል ንክኪ
+
         const API_URL = "/api/sales";
         const salesForm = document.getElementById("salesForm");
         const salesTableBody = document.getElementById("salesTableBody");
