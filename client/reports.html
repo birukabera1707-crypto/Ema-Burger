@@ -105,20 +105,12 @@
             </div>
         </section>
 
-        <!-- PAYMENT SUMMARY -->
-        <h3 style="margin-top: 30px; border-bottom: 2px solid #A8B99A; padding-bottom: 5px; color: #3B2A22;">💳 Payment Method Breakdown</h3>
+        <!-- PAYMENT SUMMARY (Optional or Total Cash) -->
+        <h3 style="margin-top: 30px; border-bottom: 2px solid #A8B99A; padding-bottom: 5px; color: #3B2A22;">💳 Payment Summary</h3>
         <section class="payment-cards" style="display: flex; gap: 15px; flex-wrap: wrap;">
             <div class="payment-card" style="flex: 1; min-width: 150px; background: #FFFFFF; padding: 15px; border-radius: 8px; border-left: 4px solid #A8B99A; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
-                <h3 style="margin: 0; font-size: 14px; color: #3B2A22;">💵 Cash</h3>
+                <h3 style="margin: 0; font-size: 14px; color: #3B2A22;">💵 Total Sales</h3>
                 <strong id="repCash" style="display: block; margin-top: 8px; color: #3B2A22; font-size: 16px;">0.00 ETB</strong>
-            </div>
-            <div class="payment-card" style="flex: 1; min-width: 150px; background: #FFFFFF; padding: 15px; border-radius: 8px; border-left: 4px solid #A8B99A; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
-                <h3 style="margin: 0; font-size: 14px; color: #3B2A22;">📱 Telebirr</h3>
-                <strong id="repTelebirr" style="display: block; margin-top: 8px; color: #3B2A22; font-size: 16px;">0.00 ETB</strong>
-            </div>
-            <div class="payment-card" style="flex: 1; min-width: 150px; background: #FFFFFF; padding: 15px; border-radius: 8px; border-left: 4px solid #A8B99A; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
-                <h3 style="margin: 0; font-size: 14px; color: #3B2A22;">🏦 Bank</h3>
-                <strong id="repBank" style="display: block; margin-top: 8px; color: #3B2A22; font-size: 16px;">0.00 ETB</strong>
             </div>
         </section>
 
@@ -135,12 +127,11 @@
                         <th style="padding: 12px;">Quantity</th>
                         <th style="padding: 12px;">Price</th>
                         <th style="padding: 12px;">Total</th>
-                        <th style="padding: 12px;">Payment</th>
                     </tr>
                 </thead>
                 <tbody id="repTableBody">
                     <tr>
-                        <td colspan="8" class="empty-message" style="padding: 15px; text-align: center; color: #3B2A22;">No sales found for this date range.</td>
+                        <td colspan="7" class="empty-message" style="padding: 15px; text-align: center; color: #3B2A22;">No sales found for this date range.</td>
                     </tr>
                 </tbody>
             </table>
@@ -254,26 +245,22 @@
                 renderReport(filteredSales);
             } catch (error) {
                 console.error("Fetch error:", error);
-                repTableBody.innerHTML = `<tr><td colspan="8" class="empty-message" style="padding: 15px; text-align: center; color: #3B2A22;">Server connection failed.</td></tr>`;
+                repTableBody.innerHTML = `<tr><td colspan="7" class="empty-message" style="padding: 15px; text-align: center; color: #3B2A22;">Server connection failed.</td></tr>`;
             }
         }
 
         function renderReport(sales) {
             repTableBody.innerHTML = "";
-            let revenue = 0, items = 0, cash = 0, telebirr = 0, bank = 0;
+            let revenue = 0, items = 0;
 
             if (!sales || sales.length === 0) {
-                repTableBody.innerHTML = `<tr><td colspan="8" class="empty-message" style="padding: 15px; text-align: center; color: #3B2A22;">በተመረጠው የቀን ክልል ውስጥ የተመዘገበ ሽያጭ የለም።</td></tr>`;
+                repTableBody.innerHTML = `<tr><td colspan="7" class="empty-message" style="padding: 15px; text-align: center; color: #3B2A22;">በተመረጠው የቀን ክልል ውስጥ የተመዘገበ ሽያጭ የለም።</td></tr>`;
             }
 
             sales.forEach(sale => {
                 const total = Number(sale.total) || 0;
                 revenue += total;
                 items += Number(sale.quantity) || 0;
-
-                if (sale.paymentMethod === "Cash") cash += total;
-                if (sale.paymentMethod === "Telebirr") telebirr += total;
-                if (sale.paymentMethod === "Bank") bank += total;
 
                 const rawDate = sale.createdAt || sale.date;
                 const saleDate = rawDate ? new Date(rawDate) : new Date();
@@ -290,7 +277,6 @@
                     <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;">${sale.quantity}</td>
                     <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;">${sale.price} ETB</td>
                     <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;"><b>${total.toFixed(2)} ETB</b></td>
-                    <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;">${sale.paymentMethod || "Cash"}</td>
                 `;
                 repTableBody.appendChild(row);
             });
@@ -298,9 +284,7 @@
             document.getElementById("repOrders").textContent = sales.length;
             document.getElementById("repItems").textContent = items;
             document.getElementById("repRevenue").textContent = revenue.toFixed(2) + " ETB";
-            document.getElementById("repCash").textContent = cash.toFixed(2) + " ETB";
-            document.getElementById("repTelebirr").textContent = telebirr.toFixed(2) + " ETB";
-            document.getElementById("repBank").textContent = bank.toFixed(2) + " ETB";
+            document.getElementById("repCash").textContent = revenue.toFixed(2) + " ETB";
         }
 
         fetchHistoricalSales();

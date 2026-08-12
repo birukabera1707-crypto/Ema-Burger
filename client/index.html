@@ -44,23 +44,6 @@
             </div>
         </section>
 
-        <!-- PAYMENT SUMMARY -->
-        <h3>Payment Method</h3>
-        <section class="payment-cards">
-            <div class="payment-card">
-                <h3>💵 Cash</h3>
-                <strong id="cashTotal">0.00 ETB</strong>
-            </div>
-            <div class="payment-card">
-                <h3>📱 Telebirr</h3>
-                <strong id="telebirrTotal">0.00 ETB</strong>
-            </div>
-            <div class="payment-card">
-                <h3>🏦 Bank</h3>
-                <strong id="bankTotal">0.00 ETB</strong>
-            </div>
-        </section>
-
         <!-- NEW SALE -->
         <section class="form-card">
             <h3>🛒 Add New Sales</h3>
@@ -98,15 +81,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="paymentMethod">Payment Method</label>
-                        <select id="paymentMethod">
-                            <option value="Cash">💵 Cash</option>
-                            <option value="Telebirr">📱 Telebirr</option>
-                            <option value="Bank">🏦 Bank</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
                         <label for="saleTotal">Total Amount</label>
                         <input type="text" id="saleTotal" value="0.00 ETB" readonly>
                     </div>
@@ -129,13 +103,12 @@
                         <th>Quantity</th>
                         <th>Price</th>
                         <th>Total</th>
-                        <th>Payment</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="salesTableBody">
                     <tr>
-                        <td colspan="9" class="empty-message">No sales found for today.</td>
+                        <td colspan="8" class="empty-message">No sales found for today.</td>
                     </tr>
                 </tbody>
             </table>
@@ -160,20 +133,18 @@
         let inactivityTimer;
         function resetInactivityTimer() {
             clearTimeout(inactivityTimer);
-            // 10 ደቂቃ = 10 * 60 * 1000 ሚሊሰከንድ
             inactivityTimer = setTimeout(() => {
                 alert("እባክዎ በድጋሚ ይግቡ (Session Timeout due to inactivity)");
                 logout();
             }, 10 * 60 * 1000);
         }
 
-        // የተጠቃሚ እንቅስቃሴዎችን መከታተል (ማውዝ፣ ኪቦርድ፣ ስክሪን ንክኪ)
         window.onload = resetInactivityTimer;
         document.onmousemove = resetInactivityTimer;
         document.onkeypress = resetInactivityTimer;
         document.onclick = resetInactivityTimer;
         document.onscroll = resetInactivityTimer;
-        document.ontouchstart = resetInactivityTimer; // ለሞባይል ንክኪ
+        document.ontouchstart = resetInactivityTimer;
 
         const API_URL = "/api/sales";
         const salesForm = document.getElementById("salesForm");
@@ -238,26 +209,22 @@
                 renderSales(todaySales);
             } catch (error) {
                 console.error("Fetch error:", error);
-                salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">Server connection failed.</td></tr>`;
+                salesTableBody.innerHTML = `<tr><td colspan="8" class="empty-message">Server connection failed.</td></tr>`;
             }
         }
 
         function renderSales(sales) {
             salesTableBody.innerHTML = "";
-            let revenue = 0, items = 0, cash = 0, telebirr = 0, bank = 0;
+            let revenue = 0, items = 0;
 
             if (!sales || sales.length === 0) {
-                salesTableBody.innerHTML = `<tr><td colspan="9" class="empty-message">No sales to display.</td></tr>`;
+                salesTableBody.innerHTML = `<tr><td colspan="8" class="empty-message">No sales to display.</td></tr>`;
             }
 
             sales.forEach(sale => {
                 const total = Number(sale.total) || 0;
                 revenue += total;
                 items += Number(sale.quantity) || 0;
-
-                if (sale.paymentMethod === "Cash") cash += total;
-                if (sale.paymentMethod === "Telebirr") telebirr += total;
-                if (sale.paymentMethod === "Bank") bank += total;
 
                 const rawDate = sale.createdAt || sale.date;
                 const saleDate = rawDate ? new Date(rawDate) : new Date();
@@ -277,7 +244,6 @@
                     <td>${sale.quantity}</td>
                     <td>${sale.price} ETB</td>
                     <td><b>${total.toFixed(2)} ETB</b></td>
-                    <td>${sale.paymentMethod || "Cash"}</td>
                     <td>
                         <button class="delete-btn" ${deleteDisabled} onclick="deleteSale('${sale._id}')">🗑️ delete</button>
                     </td>
@@ -287,9 +253,6 @@
             document.getElementById("todayOrders").textContent = sales.length;
             document.getElementById("todayItems").textContent = items;
             document.getElementById("todayRevenue").textContent = revenue.toFixed(2) + " ETB";
-            document.getElementById("cashTotal").textContent = cash.toFixed(2) + " ETB";
-            document.getElementById("telebirrTotal").textContent = telebirr.toFixed(2) + " ETB";
-            document.getElementById("bankTotal").textContent = bank.toFixed(2) + " ETB";
         }
 
         salesForm.addEventListener("submit", async function (event) {
@@ -298,7 +261,6 @@
             const itemName = document.getElementById("itemName").value;
             const quantity = Number(document.getElementById("quantity").value);
             const price = Number(document.getElementById("price").value);
-            const paymentMethod = document.getElementById("paymentMethod").value;
 
             if (!category || !itemName || quantity <= 0 || price < 0) {
                 alert("Please fill in all fields correctly.");
@@ -306,7 +268,7 @@
             }
 
             const newSale = {
-                category, itemName, quantity, price, paymentMethod,
+                category, itemName, quantity, price,
                 total: quantity * price,
                 date: new Date().toISOString()
             };
