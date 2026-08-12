@@ -15,19 +15,19 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(59,42,34,0.5);
             justify-content: center;
             align-items: center;
         }
         .modal-content {
-            background: white;
+            background: #FFFFFF;
             padding: 25px;
-            border-radius: 10px;
+            border-radius: 12px;
             width: 100%;
             max-width: 350px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(59,42,34,0.2);
             position: relative;
-            border-left: 5px solid #28a745;
+            border-left: 6px solid #D89B45;
         }
         .close-btn {
             position: absolute;
@@ -35,40 +35,40 @@
             right: 15px;
             font-size: 20px;
             cursor: pointer;
-            color: #666;
+            color: #3B2A22;
         }
     </style>
 </head>
-<body style="background-color: #f4f7f6;">
+<body style="background-color: #F5F0E6; font-family: sans-serif; margin: 0;">
 
     <!-- NAVBAR -->
-    <nav class="navbar" style="display: flex; justify-content: space-between; align-items: center; background-color: #111111; padding: 15px 30px; color: white;">
+    <nav class="navbar" style="display: flex; justify-content: space-between; align-items: center; background-color: #1F211E; padding: 15px 30px; color: #F5F0E6; border-bottom: 3px solid #D89B45;">
         <div class="logo-container" style="display: flex; align-items: center; gap: 10px;">
             <img src="Style/logo.png" alt="EMA Burger Logo" style="height: 35px;">
-            <h1 style="margin: 0; font-size: 20px;">EMA BURGER</h1>
+            <h1 style="margin: 0; font-size: 20px; color: #F5F0E6;">EMA BURGER</h1>
         </div>
-      <div style="display: flex; gap: 8px; align-items: center;">
-    <button onclick="openRegisterModal()" style="padding: 6px 12px; background: #D89B45; color: #1F211E; border: none; font-size: 13px; font-weight: bold; border-radius: 4px; cursor: pointer;">➕ Register</button>
-    <a href="index.html" style="text-decoration: none; padding: 6px 12px; background: #D89B45; color: #1F211E; font-size: 13px; font-weight: bold; border-radius: 4px; display: inline-block;">📊 Dashboard</a>
-    <button onclick="logout()" style="padding: 6px 12px; background: #3B2A22; color: #F5F0E6; border: none; font-size: 13px; font-weight: bold; border-radius: 4px; cursor: pointer;">🚪 Logout</button>
-</div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <button onclick="openRegisterModal()" style="padding: 6px 12px; background: #D89B45; color: #1F211E; border: none; font-size: 13px; font-weight: bold; border-radius: 4px; cursor: pointer;">➕ Register</button>
+            <a href="index.html" style="text-decoration: none; padding: 6px 12px; background: #A8B99A; color: #1F211E; font-size: 13px; font-weight: bold; border-radius: 4px; display: inline-block;">📊 Dashboard</a>
+            <button onclick="logout()" style="padding: 6px 12px; background: #3B2A22; color: #F5F0E6; border: none; font-size: 13px; font-weight: bold; border-radius: 4px; cursor: pointer;">🚪 Logout</button>
+        </div>
     </nav>
 
     <!-- REGISTER CASHIER MODAL POPUP -->
     <div id="registerModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeRegisterModal()">&times;</span>
-            <h3 style="margin-top: 0; color: #333; font-size: 18px;">👥 New Cashier Registration</h3>
+            <h3 style="margin-top: 0; color: #3B2A22; font-size: 18px;">👥 New Cashier Registration</h3>
             <form id="registerCashierForm">
                 <div class="form-group" style="margin-bottom: 12px;">
-                    <label style="font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Cashier Username</label>
-                    <input type="text" id="newCashierUser" required style="width: 100%; padding: 8px; font-size: 13px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;">
+                    <label style="font-size: 12px; color: #3B2A22; display: block; margin-bottom: 4px; font-weight: 600;">Cashier Username</label>
+                    <input type="text" id="newCashierUser" required style="width: 100%; padding: 9px; font-size: 13px; border-radius: 5px; border: 1px solid #A8B99A; background-color: #F5F0E6; color: #3B2A22; box-sizing: border-box;">
                 </div>
                 <div class="form-group" style="margin-bottom: 15px;">
-                    <label style="font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Cashier Password</label>
-                    <input type="password" id="newCashierPass" required style="width: 100%; padding: 8px; font-size: 13px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;">
+                    <label style="font-size: 12px; color: #3B2A22; display: block; margin-bottom: 4px; font-weight: 600;">Cashier Password</label>
+                    <input type="password" id="newCashierPass" required style="width: 100%; padding: 9px; font-size: 13px; border-radius: 5px; border: 1px solid #A8B99A; background-color: #F5F0E6; color: #3B2A22; box-sizing: border-box;">
                 </div>
-                <button type="submit" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">💾 Register</button>
+                <button type="submit" style="width: 100%; padding: 10px; background: #A8B99A; color: #1F211E; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 14px;">💾 Register</button>
             </form>
         </div>
     </div>
@@ -77,70 +77,70 @@
     <main class="container" style="padding: 20px;">
         
         <!-- COMPACT DATE RANGE SELECTOR -->
-        <div class="form-card" style="margin-bottom: 25px; padding: 15px; display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; border-left: 5px solid #2575fc; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <div class="form-card" style="margin-bottom: 25px; padding: 15px; display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; border-left: 6px solid #D89B45; background: #FFFFFF; border-radius: 8px; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
             <div style="display: flex; flex-direction: column;">
-                <label for="startDate" style="font-size: 12px; color: #666; margin-bottom: 3px;">From:</label>
-                <input type="date" id="startDate" style="padding: 7px 10px; font-size: 14px; border-radius: 5px; border: 1px solid #ccc;">
+                <label for="startDate" style="font-size: 12px; color: #3B2A22; margin-bottom: 3px; font-weight: 600;">From:</label>
+                <input type="date" id="startDate" style="padding: 7px 10px; font-size: 14px; border-radius: 5px; border: 1px solid #A8B99A; background-color: #F5F0E6; color: #3B2A22;">
             </div>
             <div style="display: flex; flex-direction: column;">
-                <label for="endDate" style="font-size: 12px; color: #666; margin-bottom: 3px;">To:</label>
-                <input type="date" id="endDate" style="padding: 7px 10px; font-size: 14px; border-radius: 5px; border: 1px solid #ccc;">
+                <label for="endDate" style="font-size: 12px; color: #3B2A22; margin-bottom: 3px; font-weight: 600;">To:</label>
+                <input type="date" id="endDate" style="padding: 7px 10px; font-size: 14px; border-radius: 5px; border: 1px solid #A8B99A; background-color: #F5F0E6; color: #3B2A22;">
             </div>
-            <button onclick="fetchHistoricalSales()" class="submit-btn" style="padding: 8px 20px; background: #2575fc; color: white; cursor: pointer; font-size: 14px; height: 38px; margin: 0; border: none; border-radius: 5px; font-weight: bold; width: auto; flex-shrink: 0;">🔍 Search</button>
+            <button onclick="fetchHistoricalSales()" class="submit-btn" style="padding: 8px 20px; background: #D89B45; color: #1F211E; cursor: pointer; font-size: 14px; height: 38px; margin: 0; border: none; border-radius: 5px; font-weight: bold; width: auto; flex-shrink: 0;">🔍 Search</button>
         </div>
 
         <!-- DASHBOARD CARDS -->
-        <section class="dashboard-cards">
-            <div class="stat-card" style="border-top: 4px solid #2575fc;">
-                <h4>🧾 Total Orders</h4>
-                <h2 id="repOrders">0</h2>
+        <section class="dashboard-cards" style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div class="stat-card" style="flex: 1; min-width: 200px; background: #FFFFFF; padding: 20px; border-radius: 8px; border-top: 4px solid #D89B45; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
+                <h4 style="margin: 0; color: #3B2A22; opacity: 0.8; font-size: 14px;">🧾 Total Orders</h4>
+                <h2 id="repOrders" style="margin: 10px 0 0 0; color: #3B2A22; font-size: 24px;">0</h2>
             </div>
-            <div class="stat-card" style="border-top: 4px solid #2575fc;">
-                <h4>🍔 Total Sold Items</h4>
-                <h2 id="repItems">0</h2>
+            <div class="stat-card" style="flex: 1; min-width: 200px; background: #FFFFFF; padding: 20px; border-radius: 8px; border-top: 4px solid #D89B45; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
+                <h4 style="margin: 0; color: #3B2A22; opacity: 0.8; font-size: 14px;">🍔 Total Sold Items</h4>
+                <h2 id="repItems" style="margin: 10px 0 0 0; color: #3B2A22; font-size: 24px;">0</h2>
             </div>
-            <div class="stat-card" style="border-top: 4px solid #2575fc;">
-                <h4>💰 Total Revenue</h4>
-                <h2 id="repRevenue">0.00 ETB</h2>
+            <div class="stat-card" style="flex: 1; min-width: 200px; background: #FFFFFF; padding: 20px; border-radius: 8px; border-top: 4px solid #D89B45; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
+                <h4 style="margin: 0; color: #3B2A22; opacity: 0.8; font-size: 14px;">💰 Total Revenue</h4>
+                <h2 id="repRevenue" style="margin: 10px 0 0 0; color: #3B2A22; font-size: 24px;">0.00 ETB</h2>
             </div>
         </section>
 
         <!-- PAYMENT SUMMARY -->
-        <h3 style="margin-top: 30px; border-bottom: 2px solid #ddd; padding-bottom: 5px; color: #333;">💳 Payment Method Breakdown</h3>
-        <section class="payment-cards">
-            <div class="payment-card">
-                <h3>💵 Cash</h3>
-                <strong id="repCash">0.00 ETB</strong>
+        <h3 style="margin-top: 30px; border-bottom: 2px solid #A8B99A; padding-bottom: 5px; color: #3B2A22;">💳 Payment Method Breakdown</h3>
+        <section class="payment-cards" style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div class="payment-card" style="flex: 1; min-width: 150px; background: #FFFFFF; padding: 15px; border-radius: 8px; border-left: 4px solid #A8B99A; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
+                <h3 style="margin: 0; font-size: 14px; color: #3B2A22;">💵 Cash</h3>
+                <strong id="repCash" style="display: block; margin-top: 8px; color: #3B2A22; font-size: 16px;">0.00 ETB</strong>
             </div>
-            <div class="payment-card">
-                <h3>📱 Telebirr</h3>
-                <strong id="repTelebirr">0.00 ETB</strong>
+            <div class="payment-card" style="flex: 1; min-width: 150px; background: #FFFFFF; padding: 15px; border-radius: 8px; border-left: 4px solid #A8B99A; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
+                <h3 style="margin: 0; font-size: 14px; color: #3B2A22;">📱 Telebirr</h3>
+                <strong id="repTelebirr" style="display: block; margin-top: 8px; color: #3B2A22; font-size: 16px;">0.00 ETB</strong>
             </div>
-            <div class="payment-card">
-                <h3>🏦 Bank</h3>
-                <strong id="repBank">0.00 ETB</strong>
+            <div class="payment-card" style="flex: 1; min-width: 150px; background: #FFFFFF; padding: 15px; border-radius: 8px; border-left: 4px solid #A8B99A; box-shadow: 0 4px 15px rgba(59,42,34,0.1);">
+                <h3 style="margin: 0; font-size: 14px; color: #3B2A22;">🏦 Bank</h3>
+                <strong id="repBank" style="display: block; margin-top: 8px; color: #3B2A22; font-size: 16px;">0.00 ETB</strong>
             </div>
         </section>
 
         <!-- SALES TABLE -->
-        <h3 id="tableTitle" style="margin-top: 40px; color: #333;">📋 Detailed Sales Records</h3>
-        <div class="table-container">
-            <table>
+        <h3 id="tableTitle" style="margin-top: 40px; color: #3B2A22;">📋 Detailed Sales Records</h3>
+        <div class="table-container" style="background: #FFFFFF; border-radius: 8px; box-shadow: 0 4px 15px rgba(59,42,34,0.1); overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
                 <thead>
-                    <tr style="background: #2575fc; color: white;">
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Category</th>
-                        <th>Item</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total</th>
-                        <th>Payment</th>
+                    <tr style="background: #3B2A22; color: #F5F0E6;">
+                        <th style="padding: 12px;">Date</th>
+                        <th style="padding: 12px;">Time</th>
+                        <th style="padding: 12px;">Category</th>
+                        <th style="padding: 12px;">Item</th>
+                        <th style="padding: 12px;">Quantity</th>
+                        <th style="padding: 12px;">Price</th>
+                        <th style="padding: 12px;">Total</th>
+                        <th style="padding: 12px;">Payment</th>
                     </tr>
                 </thead>
                 <tbody id="repTableBody">
                     <tr>
-                        <td colspan="8" class="empty-message">No sales found for this date range.</td>
+                        <td colspan="8" class="empty-message" style="padding: 15px; text-align: center; color: #3B2A22;">No sales found for this date range.</td>
                     </tr>
                 </tbody>
             </table>
@@ -254,7 +254,7 @@
                 renderReport(filteredSales);
             } catch (error) {
                 console.error("Fetch error:", error);
-                repTableBody.innerHTML = `<tr><td colspan="8" class="empty-message">Server connection failed.</td></tr>`;
+                repTableBody.innerHTML = `<tr><td colspan="8" class="empty-message" style="padding: 15px; text-align: center; color: #3B2A22;">Server connection failed.</td></tr>`;
             }
         }
 
@@ -263,7 +263,7 @@
             let revenue = 0, items = 0, cash = 0, telebirr = 0, bank = 0;
 
             if (!sales || sales.length === 0) {
-                repTableBody.innerHTML = `<tr><td colspan="8" class="empty-message">በተመረጠው የቀን ክልል ውስጥ የተመዘገበ ሽያጭ የለም።</td></tr>`;
+                repTableBody.innerHTML = `<tr><td colspan="8" class="empty-message" style="padding: 15px; text-align: center; color: #3B2A22;">በተመረጠው የቀን ክልል ውስጥ የተመዘገበ ሽያጭ የለም።</td></tr>`;
             }
 
             sales.forEach(sale => {
@@ -283,14 +283,14 @@
 
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td>${date}</td>
-                    <td>${time}</td>
-                    <td>${sale.category || "-"}</td>
-                    <td><b>${sale.itemName}</b></td>
-                    <td>${sale.quantity}</td>
-                    <td>${sale.price} ETB</td>
-                    <td><b>${total.toFixed(2)} ETB</b></td>
-                    <td>${sale.paymentMethod || "Cash"}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;">${date}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;">${time}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;">${sale.category || "-"}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;"><b>${sale.itemName}</b></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;">${sale.quantity}</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;">${sale.price} ETB</td>
+                    <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;"><b>${total.toFixed(2)} ETB</b></td>
+                    <td style="padding: 12px; border-bottom: 1px solid #F5F0E6; color: #3B2A22;">${sale.paymentMethod || "Cash"}</td>
                 `;
                 repTableBody.appendChild(row);
             });
