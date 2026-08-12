@@ -94,15 +94,6 @@
             </div>
         </section>
 
-        <!-- PAYMENT SUMMARY -->
-        <h3 class="section-title">💳 Payment Summary</h3>
-        <section class="payment-cards">
-            <div class="payment-card">
-                <h3>💵 Total Sales</h3>
-                <strong id="repCash">0.00 ETB</strong>
-            </div>
-        </section>
-
         <!-- SALES TABLE -->
         <h3 id="tableTitle" style="margin-top: 40px; color: #3B2A22;">📋 Detailed Sales Records</h3>
         <div class="table-container">
@@ -357,7 +348,6 @@
             document.getElementById("repOrders").textContent = sales.length;
             document.getElementById("repItems").textContent = items;
             document.getElementById("repRevenue").textContent = revenue.toFixed(2) + " ETB";
-            document.getElementById("repCash").textContent = revenue.toFixed(2) + " ETB";
         }
 
         fetchHistoricalSales();
