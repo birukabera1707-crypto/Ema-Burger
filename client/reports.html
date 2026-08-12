@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMA Burger - Sales Reports</title>
     <link rel="stylesheet" href="Style/style.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -93,6 +95,12 @@
                 <h2 id="repRevenue">0.00 ETB</h2>
             </div>
         </section>
+
+        <!-- SALES CHART SECTION -->
+        <div style="background: white; padding: 20px; border-radius: 10px; margin-top: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+            <h3 style="color: #3B2A22; margin-bottom: 15px;">📈 Daily Sales Trend Chart</h3>
+            <canvas id="salesChart" style="max-height: 320px;"></canvas>
+        </div>
 
         <!-- SALES TABLE -->
         <h3 id="tableTitle" style="margin-top: 40px; color: #3B2A22;">📋 Detailed Sales Records</h3>
@@ -313,9 +321,12 @@
             }
         }
 
+        let salesChart; // Chart instance
+
         function renderReport(sales) {
             repTableBody.innerHTML = "";
             let revenue = 0, items = 0;
+            const dailyData = {};
 
             if (!sales || sales.length === 0) {
                 repTableBody.innerHTML = `<tr><td colspan="7" class="empty-message">No sales found in the selected date range.</td></tr>`;
@@ -331,6 +342,12 @@
                 
                 const date = !isNaN(saleDate.getTime()) ? saleDate.toLocaleDateString("en-GB") : "-";
                 const time = !isNaN(saleDate.getTime()) ? saleDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : "-";
+
+                // Daily grouping for chart
+                if (!isNaN(saleDate.getTime())) {
+                    const dateKey = saleDate.toISOString().split("T")[0];
+                    dailyData[dateKey] = (dailyData[dateKey] || 0) + total;
+                }
 
                 const row = document.createElement("tr");
                 row.innerHTML = `
@@ -348,6 +365,40 @@
             document.getElementById("repOrders").textContent = sales.length;
             document.getElementById("repItems").textContent = items;
             document.getElementById("repRevenue").textContent = revenue.toFixed(2) + " ETB";
+
+            // Update or create the chart
+            updateChart(dailyData);
+        }
+
+        function updateChart(dailyData) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            const labels = Object.keys(dailyData).sort();
+            const data = labels.map(date => dailyData[date]);
+
+            if (salesChart) {
+                salesChart.destroy();
+            }
+
+            salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Daily Revenue (ETB)',
+                        data: data,
+                        backgroundColor: '#3B2A22',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
 
         fetchHistoricalSales();
