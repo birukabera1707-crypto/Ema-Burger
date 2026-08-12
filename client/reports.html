@@ -299,7 +299,7 @@
                 const endDate = endDateInput.value;
 
                 if (!startDate || !endDate) {
-                    alert("እባክዎ መጀመሪያ እና የመጨረሻ ቀን ይምረጡ።");
+                    alert("Please select start and end dates.");
                     return;
                 }
 
@@ -327,7 +327,7 @@
             let revenue = 0, items = 0;
 
             if (!sales || sales.length === 0) {
-                repTableBody.innerHTML = `<tr><td colspan="7" class="empty-message">በተመረጠው የቀን ክልል ውስጥ የተመዘገበ ሽያጭ የለም።</td></tr>`;
+                repTableBody.innerHTML = `<tr><td colspan="7" class="empty-message">No sales found in the selected date range.</td></tr>`;
             }
 
             sales.forEach(sale => {

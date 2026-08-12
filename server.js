@@ -73,7 +73,7 @@ app.delete('/api/sales/:id', async (req, res) => {
 
         // ከ 20 ደቂቃ በላይ ከሆነ ማጥፋት አይቻልም
         if (diffMinutes > 20) {
-            return res.status(400).json({ error: 'ይህ ሽያጭ ከተመዘገበ 20 ደቂቃ በላይ ስለሆነ መሰረዝ አይቻልም።' });
+            return res.status(400).json({ error: 'Sale cannot be deleted after 20 minutes' });
         }
 
         await Sale.findByIdAndDelete(req.params.id);
