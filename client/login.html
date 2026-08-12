@@ -6,26 +6,29 @@
     <title>EMA Burger - Login</title>
     <link rel="stylesheet" href="Style/style.css">
 </head>
-<body style="background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
+<body style="background-color: #F5F0E6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif;">
 
-    <div class="form-card" style="width: 100%; max-width: 400px; padding: 30px; background: white; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-left: 5px solid #2575fc;">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h2 style="color: #333; margin: 0;">EMA BURGER</h2>
-            <p style="color: #666; font-size: 14px;">እባክዎ ወደ ስርአቱ ለመግባት ይግቡ</p>
+    <div class="form-card" style="width: 100%; max-width: 400px; padding: 30px; background: #FFFFFF; border-radius: 12px; box-shadow: 0 4px 15px rgba(59,42,34,0.1); border-left: 6px solid #A8B99A; border-top: 1px solid #A8B99A; border-right: 1px solid #A8B99A; border-bottom: 1px solid #A8B99A;">
+        
+        <!-- LOGO & TITLE SECTION -->
+        <div style="text-align: center; margin-bottom: 25px;">
+            <img src="Style/logo.png" alt="EMA Burger Logo" style="height: 55px; margin-bottom: 10px;">
+            <h2 style="color: #3B2A22; margin: 0; font-size: 24px; font-weight: bold;">EMA BURGER</h2>
+            <p style="color: #3B2A22; opacity: 0.8; font-size: 14px; margin-top: 5px;">Please login to access the dashboard</p>
         </div>
 
         <form id="loginForm">
             <div class="form-group" style="margin-bottom: 15px;">
-                <label for="username" style="font-size: 13px; color: #666; display: block; margin-bottom: 5px;">Username</label>
-                <input type="text" id="username" required style="width: 100%; padding: 10px; font-size: 14px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box;">
+                <label for="username" style="font-size: 13px; color: #3B2A22; display: block; margin-bottom: 5px; font-weight: 600;">Username</label>
+                <input type="text" id="username" required style="width: 100%; padding: 11px; font-size: 14px; border-radius: 6px; border: 1px solid #A8B99A; background-color: #F5F0E6; color: #3B2A22; box-sizing: border-box;">
             </div>
 
-            <div class="form-group" style="margin-bottom: 20px;">
-                <label for="password" style="font-size: 13px; color: #666; display: block; margin-bottom: 5px;">Password</label>
-                <input type="password" id="password" required style="width: 100%; padding: 10px; font-size: 14px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box;">
+            <div class="form-group" style="margin-bottom: 25px;">
+                <label for="password" style="font-size: 13px; color: #3B2A22; display: block; margin-bottom: 5px; font-weight: 600;">Password</label>
+                <input type="password" id="password" required style="width: 100%; padding: 11px; font-size: 14px; border-radius: 6px; border: 1px solid #A8B99A; background-color: #F5F0E6; color: #3B2A22; box-sizing: border-box;">
             </div>
 
-            <button type="submit" class="submit-btn" style="width: 100%; padding: 12px; background: #2575fc; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer;">🔐 ግባ (Login)</button>
+            <button type="submit" class="submit-btn" style="width: 100%; padding: 12px; background: #D89B45; color: #1F211E; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s;">🔐 ግባ (Login)</button>
         </form>
     </div>
 
@@ -50,7 +53,7 @@
                 localStorage.setItem("userRole", "cashier");
                 window.location.href = "index.html";
             } else {
-                alert("የተሳሳተ Username ወይም Password!");
+                alert("Invalid Username or Password!");
             }
         });
     </script>
