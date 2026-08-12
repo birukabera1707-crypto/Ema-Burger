@@ -5,6 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EMA Burger - Sales Reports</title>
     <link rel="stylesheet" href="Style/style.css">
+    <style>
+        /* Modal Popup Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: relative;
+            border-left: 5px solid #28a745;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+    </style>
 </head>
 <body style="background-color: #f4f7f6;">
 
@@ -15,10 +48,30 @@
             <h1 style="margin: 0; font-size: 20px;">EMA BURGER</h1>
         </div>
         <div style="display: flex; gap: 10px; align-items: center;">
+            <button onclick="openRegisterModal()" style="padding: 8px 15px; background: #28a745; color: white; border: none; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer;">➕ Register Cashier</button>
             <a href="index.html" class="submit-btn" style="text-decoration: none; padding: 8px 18px; background: #2575fc; color: white; font-size: 14px; font-weight: bold; border-radius: 5px;">📊 Dashboard</a>
             <button onclick="logout()" style="padding: 8px 15px; background: #dc3545; color: white; border: none; font-size: 14px; font-weight: bold; border-radius: 5px; cursor: pointer;">🚪 Logout</button>
         </div>
     </nav>
+
+    <!-- REGISTER CASHIER MODAL POPUP -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeRegisterModal()">&times;</span>
+            <h3 style="margin-top: 0; color: #333; font-size: 18px;">👥 አዲስ ካሸር መመዝገቢያ</h3>
+            <form id="registerCashierForm">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label style="font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Cashier Username</label>
+                    <input type="text" id="newCashierUser" required style="width: 100%; padding: 8px; font-size: 13px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;">
+                </div>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label style="font-size: 12px; color: #666; display: block; margin-bottom: 4px;">Cashier Password</label>
+                    <input type="password" id="newCashierPass" required style="width: 100%; padding: 8px; font-size: 13px; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box;">
+                </div>
+                <button type="submit" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">💾 ካሸር መዝግብ</button>
+            </form>
+        </div>
+    </div>
 
     <!-- MAIN -->
     <main class="container" style="padding: 20px;">
@@ -111,7 +164,42 @@
             window.location.href = "login.html";
         }
 
-        // 3. 10 ደቂቃ እንቅስቃሴ ከሌለ በራሱ ሎግአውት ማድረግ (Inactivity Timeout)
+        // 3. Modal መክፈቻ እና መዝጊያ ተግባራት
+        function openRegisterModal() {
+            document.getElementById("registerModal").style.display = "flex";
+        }
+        function closeRegisterModal() {
+            document.getElementById("registerModal").style.display = "none";
+        }
+
+        // 4. አዲስ ካሸር መመዝገብ (LocalStorage ላይ ማስቀመጥ)
+        document.getElementById("registerCashierForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const newUser = document.getElementById("newCashierUser").value.trim();
+            const newPass = document.getElementById("newCashierPass").value.trim();
+
+            if (newUser === "owner") {
+                alert("ይህንን ስም መጠቀም አይችሉም!");
+                return;
+            }
+
+            let savedCashiers = JSON.parse(localStorage.getItem("emaCashiers")) || [];
+            
+            const exists = savedCashiers.some(c => c.username === newUser);
+            if (exists) {
+                alert("ይህ ካሸር ስም ቀደም ሲል ተመዝግቧል!");
+                return;
+            }
+
+            savedCashiers.push({ username: newUser, password: newPass });
+            localStorage.setItem("emaCashiers", JSON.stringify(savedCashiers));
+
+            alert(`ካሸር "${newUser}" በအောင်မြင်ነት ተመዝግቧል!`);
+            document.getElementById("registerCashierForm").reset();
+            closeRegisterModal();
+        });
+
+        // 5. 10 ደቂቃ እንቅስቃሴ ከሌለ በራሱ ሎግአውት ማድረግ
         let inactivityTimer;
         function resetInactivityTimer() {
             clearTimeout(inactivityTimer);
@@ -133,7 +221,6 @@
         const startDateInput = document.getElementById("startDate");
         const endDateInput = document.getElementById("endDate");
 
-        // በነባሪ የዛሬውን ቀን መሙላት
         const todayStr = new Date().toISOString().split("T")[0];
         startDateInput.value = todayStr;
         endDateInput.value = todayStr;
@@ -152,7 +239,6 @@
                     return;
                 }
 
-                // ከቀን A እስከ ቀን B ማጣራት
                 const filteredSales = sales.filter(sale => {
                     const rawDate = sale.createdAt || sale.date;
                     if (!rawDate) return false;
@@ -217,7 +303,6 @@
             document.getElementById("repBank").textContent = bank.toFixed(2) + " ETB";
         }
 
-        // ገጹ ሲከፈት የዛሬውን ሪፖርት ማምጣት
         fetchHistoricalSales();
     </script>
 </body>

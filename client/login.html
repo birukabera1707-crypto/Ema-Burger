@@ -35,11 +35,18 @@
             const user = document.getElementById("username").value.trim();
             const pass = document.getElementById("password").value.trim();
 
-            // የባለቤቱ እና የካሸርዋ መለያዎች (Username እና Password እዚህ መቀየር ትችላለህ)
+            // 1. የባለቤቱ መለያ (owner ሲገባ ወደ index.html ዳሽቦርድ ይሄዳል)
             if (user === "owner" && pass === "owner123") {
                 localStorage.setItem("userRole", "owner");
                 window.location.href = "index.html";
-            } else if (user === "cashier" && pass === "cashier123") {
+                return;
+            }
+
+            // 2. ባለቤቱ በ reports.html በኩል ያስመዘገባቸው አዳዲስ ካሸሮች ብቻ መኖራቸውን ማረጋገጥ
+            const savedCashiers = JSON.parse(localStorage.getItem("emaCashiers")) || [];
+            const foundCashier = savedCashiers.find(c => c.username === user && c.password === pass);
+
+            if (foundCashier) {
                 localStorage.setItem("userRole", "cashier");
                 window.location.href = "index.html";
             } else {
