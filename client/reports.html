@@ -7,6 +7,46 @@
     <link rel="stylesheet" href="Style/style.css">
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom Theme Colors applied */
+        body {
+            background-color: #F5F0E6 !important; /* Warm Cream Background */
+            color: #3B2A22 !important; /* Dark Brown Text */
+        }
+        .navbar {
+            background-color: #A8B99A !important; /* Sage Green Navbar */
+        }
+        .navbar h1 {
+            color: #3B2A22 !important;
+        }
+        .btn-register, .btn-search, .btn-submit-modal {
+            background-color: #D89B45 !important; /* Warm Gold Buttons */
+            color: #3B2A22 !important;
+            border: none;
+            font-weight: bold;
+        }
+        .styled-table thead tr {
+            background-color: #1F211E !important; /* Soft Black Table Header */
+            color: #F5F0E6 !important;
+        }
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .chart-card {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(59, 42, 34, 0.08);
+        }
+        @media (max-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -18,9 +58,9 @@
         </div>
         <div class="nav-buttons">
             <button onclick="openRegisterModal()" class="btn-register">➕ Register</button>
-            <button onclick="openManageModal()" class="btn-manage">👥 Manage</button>
-            <a href="index.html" class="btn-dashboard">📊 Dashboard</a>
-            <button onclick="logout()" class="btn-logout">🚪 Logout</button>
+            <button onclick="openManageModal()" class="btn-manage" style="background-color: #D89B45; color: #3B2A22; border: none; font-weight: bold;">👥 Manage</button>
+            <a href="index.html" class="btn-dashboard" style="background-color: #D89B45; color: #3B2A22; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold;">📊 Dashboard</a>
+            <button onclick="logout()" class="btn-logout" style="background-color: #1F211E; color: #F5F0E6; border: none;">🚪 Logout</button>
         </div>
     </nav>
 
@@ -28,7 +68,7 @@
     <div id="registerModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeRegisterModal()">&times;</span>
-            <h3 class="modal-title">👥 New Cashier Registration</h3>
+            <h3 class="modal-title" style="color: #3B2A22;">👥 New Cashier Registration</h3>
             <form id="registerCashierForm">
                 <div class="form-group">
                     <label class="form-label">Cashier Username</label>
@@ -47,7 +87,7 @@
     <div id="manageModal" class="modal">
         <div class="modal-content large">
             <span class="close-btn" onclick="closeManageModal()">&times;</span>
-            <h3 class="modal-title">👥 Registered Cashiers List</h3>
+            <h3 class="modal-title" style="color: #3B2A22;">👥 Registered Cashiers List</h3>
             <div style="max-height: 300px; overflow-y: auto; margin-top: 15px;">
                 <table class="styled-table">
                     <thead>
@@ -68,7 +108,7 @@
     <main class="container">
         
         <!-- COMPACT DATE RANGE SELECTOR -->
-        <div class="filter-card">
+        <div class="filter-card" style="background: #ffffff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(59,42,34,0.05);">
             <div class="filter-group">
                 <label for="startDate" class="filter-label">From:</label>
                 <input type="date" id="startDate" class="filter-input">
@@ -82,24 +122,32 @@
 
         <!-- DASHBOARD CARDS -->
         <section class="dashboard-cards">
-            <div class="stat-card">
-                <h4>🧾 Total Orders</h4>
-                <h2 id="repOrders">0</h2>
+            <div class="stat-card" style="background: #ffffff; border-left: 5px solid #D89B45;">
+                <h4 style="color: #3B2A22;">🧾 Total Orders</h4>
+                <h2 id="repOrders" style="color: #1F211E;">0</h2>
             </div>
-            <div class="stat-card">
-                <h4>🍔 Total Sold Items</h4>
-                <h2 id="repItems">0</h2>
+            <div class="stat-card" style="background: #ffffff; border-left: 5px solid #A8B99A;">
+                <h4 style="color: #3B2A22;">🍔 Total Sold Items</h4>
+                <h2 id="repItems" style="color: #1F211E;">0</h2>
             </div>
-            <div class="stat-card">
-                <h4>💰 Total Revenue</h4>
-                <h2 id="repRevenue">0.00 ETB</h2>
+            <div class="stat-card" style="background: #ffffff; border-left: 5px solid #D89B45;">
+                <h4 style="color: #3B2A22;">💰 Total Revenue</h4>
+                <h2 id="repRevenue" style="color: #1F211E;">0.00 ETB</h2>
             </div>
         </section>
 
-        <!-- SALES CHART SECTION -->
-        <div style="background: white; padding: 20px; border-radius: 10px; margin-top: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-            <h3 style="color: #3B2A22; margin-bottom: 15px;">📈 Daily Sales Trend Chart</h3>
-            <canvas id="salesChart" style="max-height: 320px;"></canvas>
+        <!-- CHARTS SECTION -->
+        <div class="charts-container">
+            <!-- DAILY SALES TREND (Line Chart) -->
+            <div class="chart-card">
+                <h3 style="color: #3B2A22; margin-bottom: 15px;">📈 Daily Sales Trend</h3>
+                <canvas id="salesChart" style="max-height: 280px;"></canvas>
+            </div>
+            <!-- TOP SELLING ITEMS (Doughnut Chart) -->
+            <div class="chart-card">
+                <h3 style="color: #3B2A22; margin-bottom: 15px;">🍔 Top Selling Items Share</h3>
+                <canvas id="itemsChart" style="max-height: 280px;"></canvas>
+            </div>
         </div>
 
         <!-- SALES TABLE -->
@@ -207,8 +255,8 @@
                     row.innerHTML = `
                         <td><b>${c.username}</b></td>
                         <td style="text-align: center; display: flex; gap: 6px; justify-content: center;">
-                            <button onclick="updatePassword('${c._id}', '${c.username}')" class="btn-pass">🔑 Pass</button>
-                            <button onclick="deleteCashier('${c._id}', '${c.username}')" class="btn-delete">🗑 Delete</button>
+                            <button onclick="updatePassword('${c._id}', '${c.username}')" class="btn-pass" style="background: #D89B45; color: #3B2A22; border:none; padding: 5px 10px; border-radius: 4px; font-weight: bold;">🔑 Pass</button>
+                            <button onclick="deleteCashier('${c._id}', '${c.username}')" class="btn-delete" style="background: #1F211E; color: #F5F0E6; border:none; padding: 5px 10px; border-radius: 4px;">🗑 Delete</button>
                         </td>
                     `;
                     tbody.appendChild(row);
@@ -321,12 +369,14 @@
             }
         }
 
-        let salesChart; // Chart instance
+        let salesChart;
+        let itemsChart;
 
         function renderReport(sales) {
             repTableBody.innerHTML = "";
             let revenue = 0, items = 0;
             const dailyData = {};
+            const itemData = {};
 
             if (!sales || sales.length === 0) {
                 repTableBody.innerHTML = `<tr><td colspan="7" class="empty-message">No sales found in the selected date range.</td></tr>`;
@@ -335,7 +385,11 @@
             sales.forEach(sale => {
                 const total = Number(sale.total) || 0;
                 revenue += total;
-                items += Number(sale.quantity) || 0;
+                const qty = Number(sale.quantity) || 0;
+                items += qty;
+
+                const itemName = sale.itemName || "Unknown";
+                itemData[itemName] = (itemData[itemName] || 0) + qty;
 
                 const rawDate = sale.createdAt || sale.date;
                 const saleDate = rawDate ? new Date(rawDate) : new Date();
@@ -343,7 +397,6 @@
                 const date = !isNaN(saleDate.getTime()) ? saleDate.toLocaleDateString("en-GB") : "-";
                 const time = !isNaN(saleDate.getTime()) ? saleDate.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }) : "-";
 
-                // Daily grouping for chart
                 if (!isNaN(saleDate.getTime())) {
                     const dateKey = saleDate.toISOString().split("T")[0];
                     dailyData[dateKey] = (dailyData[dateKey] || 0) + total;
@@ -366,35 +419,75 @@
             document.getElementById("repItems").textContent = items;
             document.getElementById("repRevenue").textContent = revenue.toFixed(2) + " ETB";
 
-            // Update or create the chart
-            updateChart(dailyData);
+            updateSalesChart(dailyData);
+            updateItemsChart(itemData);
         }
 
-        function updateChart(dailyData) {
+        function updateSalesChart(dailyData) {
             const ctx = document.getElementById('salesChart').getContext('2d');
             const labels = Object.keys(dailyData).sort();
             const data = labels.map(date => dailyData[date]);
 
-            if (salesChart) {
-                salesChart.destroy();
-            }
+            if (salesChart) salesChart.destroy();
 
             salesChart = new Chart(ctx, {
-                type: 'bar',
+                type: 'line',
                 data: {
                     labels: labels,
                     datasets: [{
                         label: 'Daily Revenue (ETB)',
                         data: data,
-                        backgroundColor: '#3B2A22',
-                        borderRadius: 5
+                        borderColor: '#3B2A22', /* Dark Brown */
+                        backgroundColor: 'rgba(168, 185, 154, 0.3)', /* Sage Green tint */
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.3
                     }]
                 },
                 options: {
                     responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
+                    scales: { 
+                        y: { beginAtZero: true, grid: { color: 'rgba(59, 42, 34, 0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function updateItemsChart(itemData) {
+            const ctx = document.getElementById('itemsChart').getContext('2d');
+            
+            const sortedItems = Object.entries(itemData)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+
+            const labels = sortedItems.map(item => item[0]);
+            const data = sortedItems.map(item => item[1]);
+
+            if (itemsChart) itemsChart.destroy();
+
+            itemsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Quantity Sold',
+                        data: data,
+                        backgroundColor: [
+                            '#3B2A22', /* Dark Brown */
+                            '#D89B45', /* Warm Gold */
+                            '#A8B99A', /* Sage Green */
+                            '#1F211E', /* Soft Black */
+                            '#B45309'  /* Accent Brown/Gold */
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
                         }
                     }
                 }
